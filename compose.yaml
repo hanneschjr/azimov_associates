@@ -1,0 +1,40 @@
+services:
+  dashboard:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: associates_app
+    ports:
+      - "8050:8050"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://${USERSERVER}:${PASSWORD}@db:${PORT}/${DATABASE}
+      TZ: America/Sao_Paulo
+    env_file:
+      - .env
+    # volumes:
+    #   - ./data:/app/data
+  
+  db:
+    image: postgres:latest
+    container_name: db_associates
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${USERSERVER}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DATABASE}
+    ports:
+      - "${PORT}:${PORT2}"
+    volumes:
+      - associates_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${USERSERVER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  associates_db:
