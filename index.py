@@ -19,7 +19,7 @@ app.layout = dbc.Container([
     dcc.Store(id='store_intermedio', data={}),
     dcc.Store(id='store_adv', data={}),
     dcc.Store(id='store_proc', data={}),
-    # html.Div(id='div_fantasma', 'children'),
+    html.Div(id='div_fantasma'),
 
     # Layout
     dbc.Row([
@@ -59,6 +59,10 @@ def render_page(pathname):
 def update_file(adv_data, proc_data):
     df_adv_aux = pd.DataFrame(adv_data)
     df_proc_aux = pd.DataFrame(proc_data)
+
+    # preencher com sql
+
+    return []
 
 
 if __name__ == '__main__':
