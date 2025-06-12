@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://${USERSERVER}:${PASSWORD}@db:${PORT2}/${DATABASE}
+      DATABASE_URL: postgresql://${USERSERVER}:${PASSWORD}@db:${PORT}/${DATABASE}
       TZ: America/Sao_Paulo
     env_file:
       - .env
@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: ${DATABASE}
     ports:
-      - "${PORT}:${PORT2}"
+      - "${PORT}:${PORT}"
     volumes:
       - associates_db:/var/lib/postgresql/data
     healthcheck:

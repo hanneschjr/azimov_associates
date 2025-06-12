@@ -6,7 +6,7 @@ import pandas as pd
 # import from folders
 from app import * 
 from components import home, sidebar
-
+from connections_db import *
 # Criar estrutura para Store intermediária ===============
 
 
@@ -66,7 +66,7 @@ def update_file(adv_data, proc_data):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8050, host='0.0.0.0')
 
 
 
