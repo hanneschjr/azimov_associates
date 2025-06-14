@@ -4,10 +4,10 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 
 # import from folders
-from app import *
+from app import * 
 from components import home, sidebar
-
-# Criar estrutura para Sotre intermediária ===============
+from connections_db import *
+# Criar estrutura para Store intermediária ===============
 
 
 
@@ -19,7 +19,7 @@ app.layout = dbc.Container([
     dcc.Store(id='store_intermedio', data={}),
     dcc.Store(id='store_adv', data={}),
     dcc.Store(id='store_proc', data={}),
-    html.Div(id='dif_fantasma', 'children'),
+    html.Div(id='div_fantasma'),
 
     # Layout
     dbc.Row([
@@ -29,7 +29,6 @@ app.layout = dbc.Container([
         dbc.Col([
             dbc.Container(id='page-content', fluid=True, style={'height': '100%', 'width': '100%', 'padding-left': '14px'})
         ], md=10, style={'padding': '0px'})
-
 
     ])
 
@@ -49,6 +48,8 @@ def render_page(pathname):
             html.P('Use a NavBar para retornar ao sistema de maneira correta.')
         ])
 
+
+
 # Dcc.Store back to file
 @app.callback(
     Output('div_fantasma', 'children'), 
@@ -59,9 +60,13 @@ def update_file(adv_data, proc_data):
     df_adv_aux = pd.DataFrame(adv_data)
     df_proc_aux = pd.DataFrame(proc_data)
 
+    # preencher com sql
+
+    return []
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True, port=8050, host='0.0.0.0')
 
 
 
