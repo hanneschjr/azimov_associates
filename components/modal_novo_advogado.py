@@ -28,10 +28,30 @@ layout = dbc.Modal([
                 dbc.Input(id='adv_nome', placeholder='Nome completo do advogado...', type='text')
             ]),
         ]),
-        html.H5(['Essa é a nossa div de ERRO'], id='dif_erro2')
+        html.H5( id='dif_erro2')
     ]),
     dbc.ModalFooter([
         dbc.Button("Cancelar", id="cancel_button_novo_advogado", color="danger"),
         dbc.Button("Salvar", id="save_button_novo_advogado", color="success"),
     ])
 ], id="modal_new_lawyer", size='lg', is_open=False)
+
+
+# =========== Callbacks ========= #
+@app.callback(
+    Output('store_adv', 'data'),
+    Output('div_erro2', 'cildren'),
+    Output('div_erro2', 'style'),
+    Input('save_button_novo_advogado', 'n_clics'),
+    State('store_adv', 'data'),
+    State('adv_nome', 'value'),
+    State('adv_oab', 'value'),
+    State('adv_cpf', 'value')
+)
+def novo_adv(n, dataset, nome, oab, cpf):
+    erro = []
+    style = {}
+
+    if n:
+        if None in [nome, oab, cpf]:
+            return dataset, ['Todos dados são obrigatórios para registro!'], 
