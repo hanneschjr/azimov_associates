@@ -31,7 +31,7 @@ layout = dbc.Modal([
 
 # =========== Callbacks ======== #
 @app.callback(
-    Output('tabe_adv', 'children'),
+    Output('table_adv', 'children'),
     Input('store_adv', 'data')
 )
 def tabel(data):
