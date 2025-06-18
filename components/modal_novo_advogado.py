@@ -4,11 +4,9 @@ from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-# from dash import dash_table
-# from dash.dash_table.Format import Group
 
 from app import app
-# from components import home
+
 
 # ============= Layout ============== #
 layout = dbc.Modal([
@@ -30,10 +28,45 @@ layout = dbc.Modal([
                 dbc.Input(id='adv_nome', placeholder='Nome completo do advogado...', type='text')
             ]),
         ]),
-        html.H5(['Essa é a nossa div de ERRO'], id='dif_erro2')
+        html.H5( id='dif_erro2')
     ]),
     dbc.ModalFooter([
         dbc.Button("Cancelar", id="cancel_button_novo_advogado", color="danger"),
         dbc.Button("Salvar", id="save_button_novo_advogado", color="success"),
     ])
 ], id="modal_new_lawyer", size='lg', is_open=False)
+
+
+# =========== Callbacks ========= #
+@app.callback(
+    Output('store_adv', 'data'),
+    Output('div_erro2', 'cildren'),
+    Output('div_erro2', 'style'),
+    Input('save_button_novo_advogado', 'n_clics'),
+    State('store_adv', 'data'),
+    State('adv_nome', 'value'),
+    State('adv_oab', 'value'),
+    State('adv_cpf', 'value')
+)
+def novo_adv(n, dataset, nome, oab, cpf):
+    erro = []
+    style = {}
+
+    if n:
+        if None in [nome, oab, cpf]:
+            return dataset, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        
+        df_adv = pd.DataFrame(dataset)
+
+        if oab in df_adv['OAB'].values:
+            return dataset, ['Número de OAB já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        elif cpf in df_adv['CPF'].values:
+            return dataset, ['Número de CPF já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        elif nome in df_adv['Advogado'].values:
+            return dataset, [f'Nome {nome} já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        
+        df_adv.loc[df_adv.shape[0]] = [nome, oab, cpf]
+        dataset = df_adv.to_dict()
+
+        return dataset, ['Cadastro realizado com sucesso!'], {'margin-bottom': '15px', 'color': 'green', 'text-shadow': '2px 2px 8px #000000'}
+    return dataset, erro, style
