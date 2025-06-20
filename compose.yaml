@@ -7,7 +7,7 @@ services:
     ports:
       - "8050:8050"
     depends_on:
-      - db
+      - db_associates
     environment:
       DATABASE_URL: postgresql://${USER}:${PASSWORD}@db:${PORT}/${DATABASE}
       TZ: America/Sao_Paulo
@@ -16,7 +16,7 @@ services:
     # volumes:
     #   - ./data:/app/data
   
-  db:
+  db_associates:
     image: postgres:latest
     container_name: db_associates
     restart: always

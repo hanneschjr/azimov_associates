@@ -1,6 +1,7 @@
 from .init_database import create_database_if_not_exists
-from .init_tables import create_tables
+from .init_tables import create_table_lawyers, create_table_processes
 
 def init_db():
     create_database_if_not_exists()
-    create_tables()
+    create_table_processes()
+    create_table_lawyers()
