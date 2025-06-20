@@ -28,7 +28,7 @@ layout = dbc.Modal([
                 dbc.Input(id='adv_nome', placeholder='Nome completo do advogado...', type='text')
             ]),
         ]),
-        html.H5( id='dif_erro2')
+        html.H5(id='dif_erro2')
     ]),
     dbc.ModalFooter([
         dbc.Button("Cancelar", id="cancel_button_novo_advogado", color="danger"),
@@ -51,7 +51,21 @@ layout = dbc.Modal([
 def novo_adv(n, dataset, nome, oab, cpf):
     erro = []
     style = {}
-
     if n:
         if None in [nome, oab, cpf]:
-            return dataset, ['Todos dados são obrigatórios para registro!'], 
+            return dataset, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        
+        df_adv = pd.DataFrame(dataset)
+
+        if oab in df_adv['OAB'].values:
+            return dataset, ['Número de OAB já exixte no sistema!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        elif cpf in df_adv['CPF'].values:
+            return dataset, ['Número de CPF já exixte no sistema!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        elif nome in df_adv['Advogado'].values:
+            return dataset, [f'Nome {nome} já exixte no sistema!'], {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}
+        
+        df_adv.loc[df_adv.shape[0]] = [nome, oab, cpf]
+        dataset = df_adv.to_dict()
+
+        return dataset, ['Cadastro realizado com sucesso!'], {'margin-bottom': '15px', 'color': 'green', 'text-shadow': '2px 2px 8px #000000'}
+    return dataset, erro, style

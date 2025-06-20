@@ -6,7 +6,7 @@ import pandas as pd
 # import from folders
 from app import * 
 from components import home, sidebar
-from connections_db import *
+from db.connect import *
 # Criar estrutura para Store intermediária ===============
 
 
