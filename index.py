@@ -12,7 +12,16 @@ from app import *
 from components import home, sidebar
 from db.connect import *
 import pandas as pd
-from db.queries import consulta_geral_advogados, consulta_geral_processos, add_adv
+from db.queries import consulta_geral_advogados, consulta_geral_processos
+
+
+# import callbacks
+import callbacks.add_new_adv
+import callbacks.render_page
+import callbacks.render_table_adv
+import callbacks.toggle_modal
+import callbacks.update_bd
+
 
 dados_adv = consulta_geral_advogados()
 df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])

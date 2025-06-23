@@ -1,10 +1,5 @@
-import dash
-from dash import html, dcc, callback_context
-from dash.dependencies import Input, Output, State, ALL
+from dash import html
 import dash_bootstrap_components as dbc
-
-import json
-import pandas as pd
 
 from components import modal_advogados, modal_novo_advogado, modal_processo
 from app import app

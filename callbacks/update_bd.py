@@ -1,18 +1,9 @@
-import dash
-from dash import html, dcc, Input, Output, State
-import dash_bootstrap_components as dbc
+from dash import Input, Output
 import pandas as pd
-
-# init database
-from db import init_db
-init_db()
 
 # import from folders
 from app import * 
-from components import home, sidebar
-from db.connect import *
-import pandas as pd
-from db.queries import consulta_geral_advogados, consulta_geral_processos, add_adv
+from db.queries import add_adv
 
 
 
