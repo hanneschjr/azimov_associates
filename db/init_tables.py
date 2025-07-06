@@ -8,7 +8,7 @@ def create_table_processes():
     with instance_cursor() as cursor:
         query= '''
             CREATE TABLE IF NOT EXISTS processos (
-                nr_processo INTEGER PRIMARY KEY,
+                nr_processo VARCHAR(20) PRIMARY KEY,
                 empresa TEXT,
                 tipo TEXT,
                 acao TEXT,
@@ -16,11 +16,11 @@ def create_table_processes():
                 instancia INTEGER,
                 data_inicial DATE, 
                 data_final DATE,
-                processo_concluido INTEGER,
-                processo_vencido INTEGER,
+                processo_concluido BOOLEAN,
+                processo_vencido BOOLEAN,
                 advogados TEXT,
                 cliente TEXT,
-                cpf_cliente INTEGER,
+                cpf_cliente VARCHAR(11),
                 descricao TEXT
             )
         ''' 
@@ -33,8 +33,24 @@ def create_table_lawyers():
         query= '''
             CREATE TABLE IF NOT EXISTS advogados (
                 advogado TEXT,
-                oab INTEGER PRIMARY KEY,
-                cpf INTEGER
+                oab VARCHAR(20) PRIMARY KEY,
+                cpf_advogados VARCHAR(11) NOT NULL
+            )
+        ''' 
+        cursor.execute(query)
+
+
+def create_table_process_lawyer():
+    print(f"Conectando ao banco: {DATABASE}@{HOST}:{PORT} como {USER}")
+
+    with instance_cursor() as cursor:
+        query= '''
+            CREATE TABLE IF NOT EXISTS processo_advogado (
+                nr_processo VARCHAR(20),
+                oab VARCHAR(20),
+                PRIMARY KEY (nr_processo, oab),
+                FOREIGN KEY (nr_processo) REFERENCES processos(nr_processo),
+                FOREIGN KEY (oab) REFERENCES advogados(oab)
             )
         ''' 
         cursor.execute(query)

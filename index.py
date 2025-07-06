@@ -5,7 +5,9 @@ import pandas as pd
 
 # init database
 from db import init_db
-init_db()
+
+if __name__ == '__main__':
+    init_db()
 
 # import from folders
 from app import * 
