@@ -12,7 +12,7 @@ from components import home
     Output('table_adv', 'children'),
     Input('store_adv', 'data')
 )
-def tabel(data):
+def render_table_adv(data):
     df = pd.DataFrame(data)
     df = df.fillna('-')
     return [

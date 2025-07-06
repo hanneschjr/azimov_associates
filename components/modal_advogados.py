@@ -18,8 +18,5 @@ layout = dbc.Modal([
         dbc.Button('Sair', id='quit_button', color='danger'),
         dbc.Button('Novo', id='new_adv_button', color='success')
     ])
-], id='modal_lawyers', size='lg', is_open=False)
-
-
-# =========== Callbacks ======== #
-
+], id='modal_lawyers', size='lg', is_open=False
+)
