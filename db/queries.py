@@ -38,7 +38,7 @@ def consulta_geral_processos():
 def add_adv(nome, oab, cpf):
     with instance_cursor() as cursor:
         query='''
-            INSERT INTO advogados (advogado, oab, cpf)
+            INSERT INTO advogados (advogado, oab, cpf_advogados)
             VALUES (%s, %s, %s)
             ON CONFLICT (oab) DO NOTHING
             ''' 
