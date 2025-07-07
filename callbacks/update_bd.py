@@ -13,7 +13,7 @@ from db.queries import add_adv
     Input('store_adv', 'data'),
     Input('store_proc', 'data'),
 )
-def update_file(adv_data, proc_data):
+def update_db(adv_data, proc_data):
     if not adv_data:
         return []
 
