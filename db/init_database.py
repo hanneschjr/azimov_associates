@@ -4,7 +4,7 @@ import os
 
 def create_database_if_not_exists():
     target_dbname = os.getenv("DATABASE")
-    user = os.getenv("USER")
+    user = os.getenv("USERSERVER")
     password = os.getenv("PASSWORD")
     host = os.getenv("HOST", "localhost")
     port = os.getenv("PORT", 5432)

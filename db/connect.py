@@ -10,7 +10,7 @@ import os
 load_dotenv()
 DATABASE = os.getenv("DATABASE")
 HOST = os.getenv("HOST")
-USER = os.getenv("USER")
+USER = os.getenv("USERSERVER")
 PASSWORD = os.getenv("PASSWORD")
 PORT = os.getenv("PORT")
 

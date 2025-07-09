@@ -4,12 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: associates_app
+    image: associates:v-1.0
     ports:
       - "8050:8050"
     depends_on:
       - db_associates
     environment:
-      DATABASE_URL: postgresql://${USER}:${PASSWORD}@db:${PORT}/${DATABASE}
+      DATABASE_URL: postgresql://${USERSERVER}:${PASSWORD}@db:${PORT}/${DATABASE}
       TZ: America/Sao_Paulo
     env_file:
       - .env
@@ -23,7 +24,7 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_USER: ${USER}
+      POSTGRES_USER: ${USERSERVER}
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: ${DATABASE}
     ports:
@@ -31,7 +32,7 @@ services:
     volumes:
       - associates_db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${USER}"]
+      test: ["CMD", "pg_isready", "-U", "${USERSERVER}"]
       interval: 10s
       timeout: 5s
       retries: 5
