@@ -1,5 +1,5 @@
 import dash
-from dash.dependencies import Input, Output, State
+from dash import Input, Output, State, callback_context
 import pandas as pd
 
 
@@ -22,13 +22,13 @@ from app import app
     State('adv_cpf', 'value'),
     State('modal_new_lawyer', 'is_open')
 )
-def novo_adv(n_save, n_cancel, n_open, dataset, nome, oab, cpf, is_open):
-    ctx = dash.callback_context
+def add_new_adv(n_save, n_cancel, n_open, dataset, nome, oab, cpf, is_open):
+    ctx = callback_context
 
-    # Detecta qual botão foi clicado
+    # protege de acionamentos inesperados na inicialização e do app e contra quebras
     if not ctx.triggered:
         return dataset, [], {}, nome, oab, cpf, is_open
-
+    # Detecta qual botão foi clicado
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     # Se clicou em "Cancelar"

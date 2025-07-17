@@ -22,7 +22,7 @@ import callbacks.add_new_adv
 import callbacks.render_page
 import callbacks.render_table_adv
 import callbacks.toggle_modal
-import callbacks.update_bd
+import callbacks.update_db
 
 
 dados_adv = consulta_geral_advogados()

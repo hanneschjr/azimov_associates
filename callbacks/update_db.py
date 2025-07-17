@@ -17,10 +17,7 @@ def update_db(adv_data, proc_data):
     if not adv_data:
         return []
 
-    df_adv_aux = pd.DataFrame(adv_data)
-    df_proc_aux = pd.DataFrame(proc_data) if proc_data else pd.DataFrame()
-
-    for _, row in df_adv_aux.iterrows():
-        add_adv(row['Advogado'], row['OAB'], row['CPF'])
+    row = adv_data[-1]
+    add_adv(row['Advogado'], row['OAB'], row['CPF'])
 
     return []
