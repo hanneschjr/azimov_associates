@@ -12,7 +12,8 @@ from app import app
     Output('adv_nome', 'value'),
     Output('adv_oab', 'value'),
     Output('adv_cpf', 'value'),
-    Output('modal_new_lawyer', 'is_open'),
+#    Output('modal_new_lawyer', 'is_open'),
+    Output('modal_adv_confirm', 'is_open'),
     Input('save_button_novo_advogado', 'n_clicks'),
     Input('cancel_button_novo_advogado', 'n_clicks'),
     Input('new_adv_button', 'n_clicks'),
@@ -22,18 +23,18 @@ from app import app
     State('adv_cpf', 'value'),
     State('modal_new_lawyer', 'is_open')
 )
-def add_new_adv(n_save, n_cancel, n_open, dataset, nome, oab, cpf, is_open):
+def add_new_adv(n_save, n_cancel, n_open, dataset, nome, oab, cpf, is_open, is_open_confirm):
     ctx = callback_context
 
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
     if not ctx.triggered:
-        return dataset, [], {}, nome, oab, cpf, is_open
+        return dataset, [], {}, nome, oab, cpf, is_open, is_open_confirm
     # Detecta qual botão foi clicado
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     # Se clicou em "Cancelar"
     if trigger_id == 'cancel_button_novo_advogado':
-        return dataset, [], {}, '', '', '', False
+        return dataset, [], {}, '', '', '', False, True
 
     # Se clicou em "Novo Advogado" para abrir o modal
     if trigger_id == 'new_adv_button':

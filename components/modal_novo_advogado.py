@@ -23,7 +23,6 @@ layout = dbc.Modal([
                 dbc.Input(id='adv_nome', placeholder='Nome completo do advogado...', type='text')
             ]),
         ]),
-        html.H5(id='div_erro2')
     ]),
     dbc.ModalFooter([
         dbc.Button("Cancelar", id="cancel_button_novo_advogado", color="danger", n_clicks=0),
