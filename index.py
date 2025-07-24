@@ -27,6 +27,7 @@ import callbacks.update_db
 
 dados_adv = consulta_geral_advogados()
 df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+print('tabela advogados:')
 print(df_adv)
 
 dados_proc = consulta_geral_processos()

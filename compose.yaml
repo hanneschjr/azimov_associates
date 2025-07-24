@@ -30,7 +30,7 @@ services:
     ports:
       - "${PORT}:${PORT}"
     volumes:
-      - associates_db:/var/lib/postgresql/data
+      - associates_db_2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${USERSERVER}"]
       interval: 10s
@@ -38,4 +38,4 @@ services:
       retries: 5
 
 volumes:
-  associates_db:
+  associates_db_2:
