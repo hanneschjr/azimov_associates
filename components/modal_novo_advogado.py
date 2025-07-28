@@ -1,4 +1,4 @@
-from dash import html
+from dash import html, dcc
 import dash_bootstrap_components as dbc
 from app import app
 
@@ -23,7 +23,8 @@ layout = dbc.Modal([
                 dbc.Input(id='adv_nome', placeholder='Nome completo do advogado...', type='text')
             ]),
         ]),
-        html.H5(['Essa é a nossa div de ERRO'], id='div_erro2')
+        html.H5(['Essa é a nossa div de ERRO'], id='div_erro2'),
+        dcc.Interval(id='temporizador', interval=5*1000, n_intervals=0, disabled=True)
     ]),
     dbc.ModalFooter([
         dbc.Button("Cancelar", id="cancel_button_novo_advogado", color="danger", n_clicks=0),
