@@ -1,8 +1,8 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 from app import app
-import dash_mantine_components as dmc
-# 
+
+
 
 # ============= Layout ============== #
 layout = dbc.Modal([
@@ -11,12 +11,15 @@ layout = dbc.Modal([
         dbc.Row([
             dbc.Col([
                 dbc.Label("OAB"),
-                dbc.Input(id="adv_oab", placeholder="Apenas números, referente a OAB ...", type="number")
+                dbc.Input(id="adv_oab", placeholder="Apenas números, referente a OAB ...", type="number", min=0, max=99999999999, step=1),
+
             ], sm=12, md=6),
             dbc.Col([
                 dbc.Label("CPF"),
-                # dbc.Input(id="adv_cpf", placeholder="Apenas número, CPF...", type='number')
-                dmc.TextInput(id="adv_cpf", label="CPF", placeholder="Apenas número, CPF...", mask="999.999.999-99")
+                dbc.Input(id="adv_cpf", placeholder="Apenas número, referente ao CPF ...", type="number",
+                    inputMode="numeric",   # ativa teclado numérico em celulares
+                    pattern=r"\d*",        # sugere apenas dígitos
+                    maxLength=11)
             ], sm=12, md=6), 
         ]),
         dbc.Row([
