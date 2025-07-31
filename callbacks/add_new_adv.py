@@ -1,6 +1,7 @@
 import dash
 from dash import Input, Output, State, callback_context
 import pandas as pd
+from utils.inputs_validates import validar_cpf
 import time
 
 
@@ -49,6 +50,7 @@ def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, 
     # Se clicou em "Salvar" em "Adicionar Novo Advogado"
     if trigger_id == 'save_button_novo_advogado':
         if None in [nome, oab, cpf]:
+            print(f'{nome}, {oab}, {cpf}')
             return dataset, ['Todos os dados são obrigatórios para registro!'], \
                    {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}, \
                    nome, oab, cpf, True, dash.no_update
@@ -69,6 +71,9 @@ def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, 
         
         elif str(cpf) in df_adv['CPF'].values:
             return dataset, ['Número de CPF já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
+        
+        elif not validar_cpf(cpf):
+            return dataset, ['Número de CPF inválido!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
         
         elif nome in df_adv['Advogado'].values:
             return dataset, [f'Nome {nome} já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
