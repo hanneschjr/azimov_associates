@@ -11,7 +11,7 @@ layout = dbc.Modal([
         dbc.Row([
             dbc.Col([
                 dbc.Label("OAB"),
-                dbc.Input(id="adv_oab", placeholder="Apenas números, referente a OAB ...", type="number", min=0, max=99999999999, step=1),
+                dbc.Input(id="adv_oab", placeholder="Apenas números, referente a OAB ...", type="number", min=0, max=9, step=1),
 
             ], sm=12, md=6),
             dbc.Col([
@@ -19,13 +19,15 @@ layout = dbc.Modal([
                 dbc.Input(id="adv_cpf", placeholder="Apenas número, referente ao CPF ...", type="text",
                     inputMode="numeric",   # ativa teclado numérico em celulares
                     pattern=r"\d*",        # sugere apenas dígitos
-                    maxLength=11)
+                    maxLength=11,
+                    valid=None)
             ], sm=12, md=6), 
         ]),
         dbc.Row([
             dbc.Col([
                 dbc.Label('Nome'),
                 dbc.Input(id='adv_nome', placeholder='Nome completo do advogado...', type='text')
+                
             ]),
         ]),
         html.H5(['Essa é a nossa div de ERRO'], id='div_erro2'),
