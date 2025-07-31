@@ -1,14 +1,6 @@
-import dash
-from dash import html, dcc
-from dash.dependencies import Input, Output, State
+from dash import html
 import dash_bootstrap_components as dbc
-import pandas as pd
-
-from dash import dash_table
-from dash.dash_table.Format import Group
-
 from app import app
-from components import home
 
 
 # =========== Layout ========= #
@@ -26,23 +18,5 @@ layout = dbc.Modal([
         dbc.Button('Sair', id='quit_button', color='danger'),
         dbc.Button('Novo', id='new_adv_button', color='success')
     ])
-], id='modal_lawyers', size='lg', is_open=False)
-
-
-# =========== Callbacks ======== #
-@app.callback(
-    Output('table_adv', 'children'),
-    Input('store_adv', 'data')
+], id='modal_lawyers', size='lg', is_open=False
 )
-def tabel(data):
-    df = pd.DataFrame(data)
-    df = df.fillna('-')
-    return [
-        dash_table.DataTable(
-            id='datatable',
-            columns= [{'name': i, 'id': i} for i in df.columns],
-            data = df.to_dict('records'),
-            page_size=10,
-            page_current=0
-        )
-    ]
