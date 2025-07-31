@@ -4,10 +4,11 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: associates_app
+    image: associates:v-1.0
     ports:
       - "8050:8050"
     depends_on:
-      - db
+      - db_associates
     environment:
       DATABASE_URL: postgresql://${USERSERVER}:${PASSWORD}@db:${PORT}/${DATABASE}
       TZ: America/Sao_Paulo
@@ -16,7 +17,7 @@ services:
     # volumes:
     #   - ./data:/app/data
   
-  db:
+  db_associates:
     image: postgres:latest
     container_name: db_associates
     restart: always
@@ -29,7 +30,7 @@ services:
     ports:
       - "${PORT}:${PORT}"
     volumes:
-      - associates_db:/var/lib/postgresql/data
+      - associates_db_2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${USERSERVER}"]
       interval: 10s
@@ -37,4 +38,4 @@ services:
       retries: 5
 
 volumes:
-  associates_db:
+  associates_db_2:

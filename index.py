@@ -3,10 +3,50 @@ from dash import html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 import pandas as pd
 
+# init database
+from db import init_db
+
+if __name__ == '__main__':
+    init_db()
+
 # import from folders
 from app import * 
 from components import home, sidebar
-from connections_db import *
+from db.connect import *
+import pandas as pd
+from db.queries import consulta_geral_advogados, consulta_geral_processos
+
+
+# import callbacks
+import callbacks.add_new_adv
+import callbacks.render_page
+import callbacks.render_table_adv
+import callbacks.toggle_modal
+import callbacks.update_db
+
+
+dados_adv = consulta_geral_advogados()
+df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+print('tabela advogados:')
+print(df_adv)
+
+dados_proc = consulta_geral_processos()
+df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
+                                            'Empresa',
+                                             'CPF',
+                                             'Tipo',
+                                             'Ação',
+                                             'Vara',
+                                             'Instância',
+                                             'Data inicial',
+                                             'Data final',
+                                             'Processo Concluído',
+                                             'Processo vencido',
+                                             'Advogados',
+                                             'Cliente',
+                                             'CPF cliente',
+                                             'Descrição'])
+
 # Criar estrutura para Store intermediária ===============
 
 
@@ -17,8 +57,8 @@ app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
     dcc.Store(id='store_intermedio', data={}),
-    dcc.Store(id='store_adv', data={}),
-    dcc.Store(id='store_proc', data={}),
+    dcc.Store(id='store_adv', data=df_adv.to_dict('records')),
+    dcc.Store(id='store_proc', data=df_proc.to_dict('records')),
     html.Div(id='div_fantasma'),
 
     # Layout
@@ -35,34 +75,6 @@ app.layout = dbc.Container([
 ], fluid=True)
 
 # ====================== Callbacks =================== #
-# URL callback to update page content
-@app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
-def render_page(pathname):
-    if pathname == '/home' or pathname == '/':
-        return home.layout
-    else:
-        return dbc.Container([
-            html.H1('404: Not found', className='text-danger'),
-            html.Hr(),
-            html.P(f"O caminho '{pathname}' não foi reconhecido..."),
-            html.P('Use a NavBar para retornar ao sistema de maneira correta.')
-        ])
-
-
-
-# Dcc.Store back to file
-@app.callback(
-    Output('div_fantasma', 'children'), 
-    Input('store_adv', 'data'),
-    Input('store_proc', 'data'),
-)
-def update_file(adv_data, proc_data):
-    df_adv_aux = pd.DataFrame(adv_data)
-    df_proc_aux = pd.DataFrame(proc_data)
-
-    # preencher com sql
-
-    return []
 
 
 if __name__ == '__main__':
