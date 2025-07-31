@@ -16,7 +16,7 @@ layout = dbc.Modal([
             ], sm=12, md=6),
             dbc.Col([
                 dbc.Label("CPF"),
-                dbc.Input(id="adv_cpf", placeholder="Apenas número, referente ao CPF ...", type="number",
+                dbc.Input(id="adv_cpf", placeholder="Apenas número, referente ao CPF ...", type="text",
                     inputMode="numeric",   # ativa teclado numérico em celulares
                     pattern=r"\d*",        # sugere apenas dígitos
                     maxLength=11)
