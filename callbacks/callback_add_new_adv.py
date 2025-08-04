@@ -1,7 +1,7 @@
 import dash
 from dash import Input, Output, State, callback_context
 import pandas as pd
-from utils.inputs_validates import validar_cpf
+from utils.inputs_validates import validar_cpf, validar_oab
 import time
 
 
@@ -74,6 +74,9 @@ def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, 
         
         elif not validar_cpf(cpf):
             return dataset, ['Número de CPF inválido!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
+
+        elif not validar_oab(oab):
+            return dataset, ['Número OAB inválido!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
         
         elif nome in df_adv['Advogado'].values:
             return dataset, [f'Nome {nome} já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False

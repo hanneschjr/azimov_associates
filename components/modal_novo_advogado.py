@@ -45,7 +45,7 @@ layout = dbc.Modal([
     ])
 ], id="modal_new_lawyer", size='lg', is_open=False)
 
-
+# valid = "False"
 # # =========== Callbacks ========= #
 # @app.callback(
 #     Output('store_adv', 'data'),
