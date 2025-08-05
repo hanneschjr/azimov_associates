@@ -2,8 +2,6 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 from app import app
 
-
-
 # ============= Layout ============== #
 layout = dbc.Modal([
     dbc.ModalHeader(dbc.ModalTitle('Adicione Um Advogado')),

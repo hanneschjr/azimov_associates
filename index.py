@@ -13,7 +13,6 @@ if __name__ == '__main__':
 from app import *
 from components import home, sidebar
 from db.connect import *
-import pandas as pd
 from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 
@@ -23,7 +22,7 @@ import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
-# import callbacks.callback_inputs_validations
+
 
 dados_adv = consulta_geral_advogados()
 df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])

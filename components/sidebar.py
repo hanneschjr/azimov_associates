@@ -7,7 +7,7 @@ from app import app
 # =========== Layout ========== #
 layout = dbc.Container([
     modal_novo_advogado.layout,
-    # modal_processo.layout,
+    modal_processo.layout,
     modal_advogados.layout,
     dbc.Container([
         dbc.Row([
