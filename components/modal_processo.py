@@ -6,8 +6,8 @@ from datetime import date
 from db.queries import consulta_geral_advogados
 
 
-dados_adv = consulta_geral_advogados()
-df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+# dados_adv = consulta_geral_advogados()
+# df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
 
 col_centered_style={'display': 'flex', 'justify-content': 'center'}
 
@@ -98,7 +98,6 @@ layout = dbc.Modal([
                             dbc.Label("Selecione o advogado responsável"),
                             dcc.Dropdown(
                                 id='advogados_envolvidos',
-                                options=[{'label': i, 'value': i} for i in df_adv['Advogado']],
                                 className='dbc'
                             )
                         ])
