@@ -23,3 +23,4 @@ def render_table_adv(data):
             page_current=0
         )
     ]
+
