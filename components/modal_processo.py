@@ -114,7 +114,16 @@ layout = dbc.Modal([
                     ], style={'padding': '15px'}),
                 ], sm=12, md=7),
                 html.Hr(),
-                ])
+                    dbc.Row([
+                        dbc.Col([
+                            dcc.Dropdown(id='input_local_arquivo', clearable=False, className='dbc', placeholder='Local de Arquivo/Local')
+                        ], sm=12, md=5, style={'padding': '15px'}),
+                        dbc.Col([
+                            dbc.Input(id='input_no_processo', placeholder='Insira o número do Processo', type='number', disabled=False)
+                        ], sm=12, md=7, style={'padding': '15px'})
+                ], style={'margin-top': '15px'}),
+                ]),
+                 
 
 
     ])
