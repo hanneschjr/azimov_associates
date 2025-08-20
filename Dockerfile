@@ -1,6 +1,6 @@
 # DOCKERFILE MULTISTAGE BUILD:
 # satage 1: baixa a imagem e instala as dependências necessárias para a aplicação
-FROM python:3.13 AS build
+FROM python:slim-trixie AS build
 # WORKDIR no build: boa prática. Não seria necessário neste projeto.
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . /app
 
 
 # state 2: cria um container enxuto sem a ferramenta pip e inicia a aplicação
-FROM python:3.13 AS runtime
+FROM python:slim-trixie AS runtime
 WORKDIR /app
 
 # copia somente os pacotes instalados para dentro do container da imagem anterior
