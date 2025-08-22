@@ -34,7 +34,7 @@ layout = dbc.Modal([
                              style={'heigth': '80%'})
             ], sm=12, md=8)
         ]),
-        html.Hr(),
+        html.Hr(style={"border": "1px solid black"}),
         dbc.Row([
             dbc.Col([
                 dbc.Label('Vara', html_for='vara'),
@@ -61,7 +61,7 @@ layout = dbc.Modal([
                 {'label': '2ª Instância', 'value': '2'},])
             ]),
         ]),
-        html.Hr(),
+        html.Hr(style={"border": "1px solid black"}),
         dbc.Row([
                 dbc.Col([
                     dbc.Row([
@@ -112,19 +112,21 @@ layout = dbc.Modal([
                         dbc.Input(id='input_cliente_cpf', placeholder='CPF do cliente (apenas números)...', type='number')
                         ])
                     ], style={'padding': '15px'}),
-                ], sm=12, md=7),
-                html.Hr(),
-                    dbc.Row([
-                        dbc.Col([
-                            dcc.Dropdown(id='input_local_arquivo', clearable=False, className='dbc', placeholder='Local de Arquivo/Local')
-                        ], sm=12, md=5, style={'padding': '15px'}),
-                        dbc.Col([
-                            dbc.Input(id='input_no_processo', placeholder='Insira o número do Processo', type='number', disabled=False)
-                        ], sm=12, md=7, style={'padding': '15px'})
-                ], style={'margin-top': '15px'}),
-                ]),
-                 
-
-
-    ])
+                ], sm=12, md=7)
+        ]),
+                # html.Hr(),
+        dbc.Row([
+            dbc.Col([
+                dcc.Dropdown(id='input_local_arquivo', clearable=False, className='dbc', placeholder='Local de Arquivo/Local')
+            ], sm=12, md=5, style={'padding': '15px'}),
+            dbc.Col([
+                dbc.Input(id='input_no_processo', placeholder='Insira o número do Processo', type='number', disabled=False)
+            ], sm=12, md=7, style={'padding': '15px'})
+        ], style={'margin-top': '15px'}),
+        html.H5(id='div_erro')
+    ]),
+    dbc.ModalFooter([
+        dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
+        dbc.Button("Salvar", "id_save_button_novo_processo", color="success"),
+    ]),
 ], id='modal_processo', size='lg', is_open=True)
