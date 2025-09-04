@@ -9,9 +9,12 @@ from components import home
 
 @app.callback(
     Output('table_adv', 'children'),
-    Input('store_adv', 'data')
+    Input('store_adv', 'data'),
+    prevent_initial_call=True
 )
 def render_table_adv(data):
+    print('O callback de renderização da tabela foi acionado! =============')
+    print(f'{data}')
     df = pd.DataFrame(data)
     df = df.fillna('-')
     return [

@@ -3,7 +3,7 @@ from dash import Input, Output, State, callback_context
 import pandas as pd
 from utils.inputs_validates import validar_cpf, validar_oab
 import time
-
+from db.queries import consulta_geral_advogados
 
 from app import app
 
@@ -16,6 +16,7 @@ from app import app
     Output('adv_cpf', 'value'),
     Output('modal_new_lawyer', 'is_open'),
     Output('temporizador', 'disabled'),
+    # Input('init_store_adv', 'data'),
     Input('save_button_novo_advogado', 'n_clicks'),
     Input('cancel_button_novo_advogado', 'n_clicks'),
     Input('new_adv_button', 'n_clicks'),
@@ -24,13 +25,18 @@ from app import app
     State('adv_nome', 'value'),
     State('adv_oab', 'value'),
     State('adv_cpf', 'value'),
-    State('modal_new_lawyer', 'is_open')
+    State('modal_new_lawyer', 'is_open'),
+    # prevent_initial_call=True
 )
 def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, is_open):
     ctx = callback_context
 
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
     if not ctx.triggered:
+        # dados_adv = consulta_geral_advogados()
+        # dataset = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF']).to_dict('records')
+        print("Callback Adicionar Advogado Acionado! ===============")
+        print(f'{dataset}')
         return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
     # Detecta qual botão foi clicado
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
@@ -46,6 +52,10 @@ def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, 
     # Se clicou em "Novo Advogado" para abrir o modal
     if trigger_id == 'new_adv_button':
         return dash.no_update, [], {}, dash.no_update, dash.no_update, dash.no_update, True, dash.no_update
+
+    if trigger_id == 'init_store_adv':
+        print(f'data + #############')        
+        return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
     # Se clicou em "Salvar" em "Adicionar Novo Advogado"
     if trigger_id == 'save_button_novo_advogado':
@@ -83,9 +93,12 @@ def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, 
 
         df_adv.loc[df_adv.shape[0]] = [nome, oab, cpf]
         dataset = df_adv.to_dict('records')
+        print("Callback Adicionar Advogado Acionado! =======")
+        print(f'{dataset}')
 
         return dataset, ['Cadastro realizado com sucesso!'], \
                {'margin-bottom': '15px', 'color': 'green'}, '', '', '', True, False
 
     # Fallback padrão
     return dataset, [], {}, nome, oab, cpf, is_open, dash.no_update
+

@@ -13,6 +13,7 @@ from db.queries import add_adv
     Output('div_fantasma', 'children'),
     Input('store_adv', 'data'),
     Input('store_proc', 'data'),
+    prevent_initial_call=True
 )
 def update_db(adv_data, proc_data):
     if not adv_data:
@@ -20,7 +21,7 @@ def update_db(adv_data, proc_data):
 
     row = adv_data[-1]
     add_adv(row['Advogado'], row['OAB'], row['CPF'])
-
+    print('Callback de insersão do item na base de dados acioando! =========')
     sleep(5)
 
 

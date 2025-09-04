@@ -27,8 +27,8 @@ import callbacks.callback_fill_drop_adv
 
 dados_adv = consulta_geral_advogados()
 df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
-print('tabela advogados:')
-print(df_adv)
+# print('tabela advogados:')
+# print(df_adv)
 
 dados_proc = consulta_geral_processos()
 df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
@@ -57,6 +57,9 @@ app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
     dcc.Store(id='store_intermedio', data={}),
+    print('Aqui é o Entrypoint'),
+    print(f'{df_adv} + &&&&&&&&&&'),
+    # dcc.Store(id='init_store_adv', data=df_adv.to_dict('records')),
     dcc.Store(id='store_adv', data=df_adv.to_dict('records')),
     dcc.Store(id='store_proc', data=df_proc.to_dict('records')),
     html.Div(id='div_fantasma'),
