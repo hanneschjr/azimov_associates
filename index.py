@@ -3,6 +3,7 @@ from dash import html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 import pandas as pd
 
+
 # init database
 from db import init_db
 
@@ -23,10 +24,11 @@ import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
 import callbacks.callback_fill_drop_adv
+import callbacks.callback_init_store_adv
 
 
-dados_adv = consulta_geral_advogados()
-df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+# dados_adv = consulta_geral_advogados()
+# df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
 # print('tabela advogados:')
 # print(df_adv)
 
@@ -56,11 +58,11 @@ df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
 app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
-    dcc.Store(id='store_intermedio', data={}),
+    dcc.Store(id='store_intermedio'),
     print('Aqui é o Entrypoint'),
-    print(f'{df_adv} + &&&&&&&&&&'),
+    # print(f'{df_adv} + &&&&&&&&&&'),
     # dcc.Store(id='init_store_adv', data=df_adv.to_dict('records')),
-    dcc.Store(id='store_adv', data=df_adv.to_dict('records')),
+    dcc.Store(id='store_adv', data=[]),
     dcc.Store(id='store_proc', data=df_proc.to_dict('records')),
     html.Div(id='div_fantasma'),
 

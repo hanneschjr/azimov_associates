@@ -21,6 +21,7 @@ def update_db(adv_data, proc_data):
 
     row = adv_data[-1]
     add_adv(row['Advogado'], row['OAB'], row['CPF'])
+    cache.delete("advogados")  # invalida cache
     print('Callback de insersão do item na base de dados acioando! =========')
     sleep(5)
 

@@ -6,6 +6,7 @@ import time
 from db.queries import consulta_geral_advogados
 
 from app import app
+from app import cache
 
 @app.callback(
     Output('store_adv', 'data'),
@@ -98,6 +99,7 @@ def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, 
 
         return dataset, ['Cadastro realizado com sucesso!'], \
                {'margin-bottom': '15px', 'color': 'green'}, '', '', '', True, False
+
 
     # Fallback padrão
     return dataset, [], {}, nome, oab, cpf, is_open, dash.no_update
