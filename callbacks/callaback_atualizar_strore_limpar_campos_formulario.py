@@ -2,7 +2,6 @@ import dash
 from dash import Input, Output, State, callback_context
 import pandas as pd
 from utils.inputs_validates import validar_cpf, validar_oab
-import time
 from db.queries import consulta_geral_advogados
 
 from app import app
@@ -17,7 +16,6 @@ from app import cache
     Output('adv_cpf', 'value'),
     Output('modal_new_lawyer', 'is_open'),
     Output('temporizador', 'disabled'),
-    # Input('init_store_adv', 'data'),
     Input('save_button_novo_advogado', 'n_clicks'),
     Input('cancel_button_novo_advogado', 'n_clicks'),
     Input('new_adv_button', 'n_clicks'),
@@ -27,18 +25,18 @@ from app import cache
     State('adv_oab', 'value'),
     State('adv_cpf', 'value'),
     State('modal_new_lawyer', 'is_open'),
-    # prevent_initial_call=True
+    prevent_initial_call=False
 )
-def add_new_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, is_open):
+def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, is_open):
     ctx = callback_context
 
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
     if not ctx.triggered:
-        # dados_adv = consulta_geral_advogados()
-        # dataset = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF']).to_dict('records')
-        print("Callback Adicionar Advogado Acionado! ===============")
-        print(f'{dataset}')
+        print("Iniciando o store_adv")
+        dados_adv = consulta_geral_advogados()
+        dataset = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF']).to_dict('records')
         return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    
     # Detecta qual botão foi clicado
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 

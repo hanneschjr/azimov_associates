@@ -2,7 +2,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 from dash import dash_table
-from dash.dash_table.Format import Group
+
 
 from app import app
 from components import home

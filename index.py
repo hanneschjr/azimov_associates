@@ -18,17 +18,16 @@ from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 
 # import callbacks
-import callbacks.callback_add_new_adv
+import callbacks.callaback_atualizar_strore_limpar_campos_formulario
 import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
 import callbacks.callback_fill_drop_adv
-import callbacks.callback_init_store_adv
-
 
 # dados_adv = consulta_geral_advogados()
 # df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+# print('Aqui é o entrypoint')
 # print('tabela advogados:')
 # print(df_adv)
 
@@ -59,10 +58,9 @@ app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
     dcc.Store(id='store_intermedio'),
-    print('Aqui é o Entrypoint'),
     # print(f'{df_adv} + &&&&&&&&&&'),
     # dcc.Store(id='init_store_adv', data=df_adv.to_dict('records')),
-    dcc.Store(id='store_adv', data=[]),
+    dcc.Store(id='store_adv'),
     dcc.Store(id='store_proc', data=df_proc.to_dict('records')),
     html.Div(id='div_fantasma'),
 
