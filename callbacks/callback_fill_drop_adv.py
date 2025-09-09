@@ -15,8 +15,10 @@ def fill_drop_adv(is_open):
 
     if is_open:
         dados_adv = consulta_geral_advogados()
-        df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+        df_adv = pd.DataFrame(dados_adv, columns=['id', 'Advogado', 'OAB', 'CPF'])
         adv_list = list(df_adv['Advogado'])
+        # adv_list.pop(0)
+        # print(f'{adv_list} -------')
         return adv_list
     return []
 

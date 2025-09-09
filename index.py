@@ -18,7 +18,7 @@ from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 
 # import callbacks
-import callbacks.callaback_atualizar_strore_limpar_campos_formulario
+import callbacks.callaback_atualizar_store_limpar_campos_formulario
 import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal

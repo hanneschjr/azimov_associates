@@ -1,6 +1,5 @@
 from dash.dependencies import Input, Output
 import pandas as pd
-
 from dash import dash_table
 
 
@@ -16,7 +15,9 @@ def render_table_adv(data):
     print('O callback de renderização da tabela foi acionado! =============')
     print(f'{data}')
     df = pd.DataFrame(data)
+    # print(f'{df}')
     df = df.fillna('-')
+    # df.drop('id', axis=1, inplace=True)
     return [
         dash_table.DataTable(
             id='datatable',
