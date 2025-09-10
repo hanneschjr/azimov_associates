@@ -11,7 +11,7 @@ from db.queries import consulta_geral_advogados
     Output('advogados_envolvidos', 'options'),
     Input('modal_processo', 'is_open')
 )
-def fill_drop_adv(is_open):
+def fill_dropdown_adv(is_open):
 
     if is_open:
         dados_adv = consulta_geral_advogados()
