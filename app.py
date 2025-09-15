@@ -1,7 +1,6 @@
 # Arquivo app do Software de Gestão de Escritório de Advocacia - Pjt Azimov modificado
 import dash
 import dash_bootstrap_components as dbc
-from flask_caching import Cache
 import os
 
 # onde pega os ícones e o tema LUX
@@ -12,13 +11,6 @@ dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates@V1.0.4
 app = dash.Dash(__name__,
                 external_stylesheets=estilos + [dbc_css]) 
 
-cache = Cache(app.server, config={
-    "CACHE_TYPE": "RedisCache",
-    "CACHE_REDIS_HOST": os.getenv("REDIS_HOST", "localhost"),
-    "CACHE_REDIS_PORT": int(os.getenv("REDIS_PORT", 6379)),
-    "CACHE_REDIS_PASSWORD": os.getenv("REDIS_PASSWORD"),
-    "CACHE_REDIS_DB": 0
-})
 
 
 

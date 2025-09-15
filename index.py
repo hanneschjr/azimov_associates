@@ -18,7 +18,7 @@ from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 
 # import callbacks
-import callbacks.callaback_atualizar_store_limpar_campos_formulario
+import callbacks.callaback_update_store_adv
 import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
@@ -81,7 +81,7 @@ app.layout = dbc.Container([
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8050, host='0.0.0.0')
+    app.run(debug=False, port=8050, host='0.0.0.0')
 
 
 

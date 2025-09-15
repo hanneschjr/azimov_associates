@@ -5,8 +5,6 @@ from utils.inputs_validates import validar_cpf, validar_oab
 from db.queries import consulta_geral_advogados
 
 from app import app
-from app import cache
-
 @app.callback(
     Output('store_adv', 'data'),
     Output('div_erro2', 'children'),
