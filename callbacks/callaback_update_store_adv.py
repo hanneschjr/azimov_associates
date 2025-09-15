@@ -63,9 +63,7 @@ def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_interva
   
         df_adv = pd.DataFrame(dataset)
 
-        # print('xxxxxxxxxxxxxxxxxxxxxxxxxx')
-        # print(df_adv)
-        # print('xxxxxxxxxxxxxxxxxxxxxxxxxx')
+        # Previne se o df estiver vazio e sem colunas
         if df_adv.empty or not all(col in df_adv.columns for col in ['Advogado', 'OAB', 'CPF']):
             df_adv = pd.DataFrame(columns=['Advogado', 'OAB', 'CPF']) # cria um dataframe vazio com as colunas
 

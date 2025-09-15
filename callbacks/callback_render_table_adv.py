@@ -13,7 +13,7 @@ from components import home
 )
 def render_table_adv(data):
     print('O callback de renderização da tabela foi acionado! =============')
-    print(f'{data}')
+    # print(f'{data}')
     df = pd.DataFrame(data)
     return [
         dash_table.DataTable(

@@ -23,7 +23,8 @@ import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
-import callbacks.callback_fill_dropdown_adv
+import callbacks.callback_update_dropdown_adv
+import callbacks.callback_open_modal_processos
 
 # dados_adv = consulta_geral_advogados()
 # df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
@@ -81,7 +82,8 @@ app.layout = dbc.Container([
 
 
 if __name__ == '__main__':
-    app.run(debug=False, port=8050, host='0.0.0.0')
+    app.run(debug=False, port=8050, host='0.0.0.0', use_reloader=False)
+    
 
 
 
