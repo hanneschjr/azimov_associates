@@ -25,6 +25,7 @@ import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
 import callbacks.callback_update_dropdown_adv
 import callbacks.callback_open_modal_processos
+import callbacks.callback_update_dropdown_adv2
 
 # dados_adv = consulta_geral_advogados()
 # df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
@@ -59,8 +60,6 @@ app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
     dcc.Store(id='store_intermedio'),
-    # print(f'{df_adv} + &&&&&&&&&&'),
-    # dcc.Store(id='init_store_adv', data=df_adv.to_dict('records')),
     dcc.Store(id='store_adv'),
     dcc.Store(id='store_proc', data=df_proc.to_dict('records')),
     html.Div(id='div_fantasma'),
@@ -71,7 +70,7 @@ app.layout = dbc.Container([
             sidebar.layout
         ], md=2, style={'padding': '0px'}),
         dbc.Col([
-            dbc.Container(id='page-content', fluid=True, style={'height': '100%', 'width': '100%', 'padding-left': '14px'})
+            dbc.Container(id='page-content', fluid=True, style={'height': '100%', 'width': '100%', 'padding-left': '14px', 'backgroundColor': "#C9C5C5" })
         ], md=10, style={'padding': '0px'})
 
     ])

@@ -6,15 +6,9 @@ import pandas as pd
 from db.queries import consulta_geral_advogados
 
 
-dados_adv = consulta_geral_advogados()
-dataset = pd.DataFrame(dados_adv, columns=['id','Advogado', 'OAB', 'CPF'])
-dataset.drop("id", axis=1, inplace=True)
-dataset = dataset.to_dict('records').copy()
-df_adv = pd.DataFrame(dataset)
+# ========== Styles =========== #
+card_style = {'height': '100%', 'margin-bottom': '12px'}
 
-# Previne se o df estiver vazio e sem colunas
-if df_adv.empty or not all(col in df_adv.columns for col in ['Advogado', 'OAB', 'CPF']):
-    df_adv = pd.DataFrame(columns=['Advogado', 'OAB', 'CPF']) # cria um dataframe vazio com as colunas
 
 # =========== Layout ========== #
 layout = dbc.Container([
@@ -23,9 +17,9 @@ layout = dbc.Container([
             html.H3("ENCONTRE O PROCESSO QUE VOCÊ PROCURA", style={'text-align': 'left', 'margin-left': '32px'})
         ], className='text-center')
     ], style={'margin-top': '14px'}),
-    html.Hr(),
+    html.Hr(style={"border": "1px solid black"}),
     dbc.Row([
-        # Filtros
+        # Coluna dos Filtros
         dbc.Col([
             dbc.Row([
                 dbc.Col([
@@ -96,7 +90,7 @@ layout = dbc.Container([
                                 dbc.Col([
                                     dcc.Dropdown(
                                         id='advogados_filter',
-                                        options=[{'label': i, 'value': i} for i in df_adv['Advogado']],
+                                        # options=[{'label': i, 'value': i} for i in df_adv['Advogado']],
                                         placeholder='SELECIONE O ADVOGADO',
                                         className='dbc'
                                     ),
@@ -112,10 +106,11 @@ layout = dbc.Container([
                 ])
             ])
         ], sm=12, md=5, lg=4),
+        # Coluna dos cards
         dbc.Col([
             dbc.Container(id='card_generator', fluid=True, style={'width': '100%', 'padding': '0px 0px 0px 0px', 'margin': '0px 0px 0px 0px'}),
             html.Div(id='div_fant')
         ], sm=12, md=7, lg=8, style={'padding-left': '0px'})
     ])
 
-], fluid=True, style={'height': '100%', 'padding': '10px', 'margin': 0, 'padding-left': 0})
+], fluid=True, style={'height': '100%', 'padding': '10px', 'margin': 0, 'padding-left': 0, })
