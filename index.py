@@ -40,6 +40,7 @@ df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
                                              'Tipo',
                                              'Ação',
                                              'Vara',
+                                             'Fase'
                                              'Instância',
                                              'Data inicial',
                                              'Data final',

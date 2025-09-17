@@ -90,7 +90,6 @@ layout = dbc.Container([
                                 dbc.Col([
                                     dcc.Dropdown(
                                         id='advogados_filter',
-                                        # options=[{'label': i, 'value': i} for i in df_adv['Advogado']],
                                         placeholder='SELECIONE O ADVOGADO',
                                         className='dbc'
                                     ),

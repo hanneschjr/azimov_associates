@@ -15,6 +15,5 @@ from app import app
 def update_dropdown_adv(is_open, store_dict):
     print('Callback_update_dropdown_adv_iniciado ============')
     df_adv = pd.DataFrame(store_dict) # converter para df facilita para criar a lista de advogados
-    lista_adv = df_adv['Advogado'].to_list() 
-    return lista_adv
+    return [{'label': i, 'value': i} for i in df_adv['Advogado']]
 

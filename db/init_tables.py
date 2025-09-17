@@ -14,12 +14,12 @@ def create_table_processes():
                 tipo TEXT,
                 acao TEXT,
                 vara TEXT,
+                fase TEXT,
                 instancia INTEGER,
                 data_inicial DATE, 
                 data_final DATE,
                 processo_concluido BOOLEAN,
                 processo_vencido BOOLEAN,
-                advogados TEXT,
                 cliente TEXT,
                 cpf_cliente VARCHAR(11),
                 descricao TEXT
