@@ -30,7 +30,7 @@ def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_interva
 
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
     if not ctx.triggered:
-        print("Iniciando o store_adv")
+        print("Iniciando o store_adv ==========")
         dados_adv = consulta_geral_advogados()
         dataset = pd.DataFrame(dados_adv, columns=['id','Advogado', 'OAB', 'CPF'])
         dataset.drop("id", axis=1, inplace=True)

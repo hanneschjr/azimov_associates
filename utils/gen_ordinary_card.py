@@ -27,7 +27,19 @@ def gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_
                             ])
                         ])
                     ])
-                ], sm=12, md=6, style={'border-right': '2px solid lightgrey'})
+                ], sm=12, md=6, style={'border-right': '2px solid lightgrey'}),
+                dbc.Col([
+                    dbc.Row([
+                        dbc.Col([
+                            html.Ul([
+                                html.Li([html.B("CLIENTE: ", style={'font-weight': 'bold'}), f"{df_aux['Cliente']}"]),
+                                html.Li([html.B("EMPRESA: ", style={'font-weight': 'bold'}), f"{df_aux['Empresa']}"]),
+                                html.Li([html.B("ADVOGADO: ", style={'font-weight': 'bold'}), f"{df_aux['Empresa']}"]),
+                            ])
+                        ])
+                    ])
+                    
+                ], sm=12, md=6, style={'height': '100%', 'margin-top': 'auto', 'margin-bottom': 'auto'})
             ])
 
         ])
