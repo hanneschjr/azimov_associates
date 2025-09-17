@@ -123,10 +123,12 @@ layout = dbc.Modal([
                 dbc.Input(id='input_no_processo', placeholder='Insira o número do Processo', type='number', disabled=False)
             ], sm=12, md=7, style={'padding': '15px'})
         ], style={'margin-top': '15px'}),
-        html.H5(id='div_erro')
+        html.H5(id='div_erro'),
+        # html.Hr(style={"border": "1px solid black"}),
     ]),
+    
     dbc.ModalFooter([
-        dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
-        dbc.Button("Salvar", "id_save_button_novo_processo", color="success"),
+            dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
+            dbc.Button("Salvar", "id_save_button_novo_processo", color="success"),
     ]),
-], id='modal_processo', size='lg', is_open=True)
+], id='modal_processo', size='lg')

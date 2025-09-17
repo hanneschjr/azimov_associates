@@ -1,13 +1,13 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
-from components import modal_advogados, modal_novo_advogado, modal_processo
+from components import modal_advogados, modal_novo_advogado, modal_novo_processo
 from app import app
 
 # =========== Layout ========== #
 layout = dbc.Container([
     modal_novo_advogado.layout,
-    modal_processo.layout,
+    modal_novo_processo.layout,
     modal_advogados.layout,
     dbc.Container([
         dbc.Row([
