@@ -3,6 +3,7 @@ from dash import html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 import pandas as pd
 
+
 # init database
 from db import init_db
 
@@ -17,17 +18,20 @@ from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 
 # import callbacks
-import callbacks.callback_add_new_adv
+import callbacks.callaback_update_store_adv
 import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
+import callbacks.callback_update_dropdown_adv
+import callbacks.callback_open_modal_processos
+import callbacks.callback_update_dropdown_adv2
 
-
-dados_adv = consulta_geral_advogados()
-df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
-print('tabela advogados:')
-print(df_adv)
+# dados_adv = consulta_geral_advogados()
+# df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
+# print('Aqui é o entrypoint')
+# print('tabela advogados:')
+# print(df_adv)
 
 dados_proc = consulta_geral_processos()
 df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
@@ -36,6 +40,7 @@ df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
                                              'Tipo',
                                              'Ação',
                                              'Vara',
+                                             'Fase'
                                              'Instância',
                                              'Data inicial',
                                              'Data final',
@@ -55,8 +60,8 @@ df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
 app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
-    dcc.Store(id='store_intermedio', data={}),
-    dcc.Store(id='store_adv', data=df_adv.to_dict('records')),
+    dcc.Store(id='store_intermedio'),
+    dcc.Store(id='store_adv'),
     dcc.Store(id='store_proc', data=df_proc.to_dict('records')),
     html.Div(id='div_fantasma'),
 
@@ -66,7 +71,7 @@ app.layout = dbc.Container([
             sidebar.layout
         ], md=2, style={'padding': '0px'}),
         dbc.Col([
-            dbc.Container(id='page-content', fluid=True, style={'height': '100%', 'width': '100%', 'padding-left': '14px'})
+            dbc.Container(id='page-content', fluid=True, style={'height': '100%', 'width': '100%', 'padding-left': '14px', 'backgroundColor': "#C9C5C5" })
         ], md=10, style={'padding': '0px'})
 
     ])
@@ -77,7 +82,8 @@ app.layout = dbc.Container([
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8050, host='0.0.0.0')
+    app.run(debug=False, port=8050, host='0.0.0.0', use_reloader=False)
+    
 
 
 

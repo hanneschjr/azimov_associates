@@ -1,20 +1,20 @@
-
 from dash.dependencies import Input, Output
 import pandas as pd
-
 from dash import dash_table
-from dash.dash_table.Format import Group
+
 
 from app import app
 from components import home
 
 @app.callback(
     Output('table_adv', 'children'),
-    Input('store_adv', 'data')
+    Input('store_adv', 'data'),
+    prevent_initial_call=True
 )
 def render_table_adv(data):
+    print('O callback de renderização da tabela foi acionado! =============')
+    # print(f'{data}')
     df = pd.DataFrame(data)
-    df = df.fillna('-')
     return [
         dash_table.DataTable(
             id='datatable',
@@ -24,3 +24,4 @@ def render_table_adv(data):
             page_current=0
         )
     ]
+

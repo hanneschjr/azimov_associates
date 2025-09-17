@@ -8,17 +8,18 @@ def create_table_processes():
     with instance_cursor() as cursor:
         query= '''
             CREATE TABLE IF NOT EXISTS processos (
-                nr_processo VARCHAR(20) PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
+                nr_processo VARCHAR(20) UNIQUE,
                 empresa TEXT,
                 tipo TEXT,
                 acao TEXT,
                 vara TEXT,
+                fase TEXT,
                 instancia INTEGER,
                 data_inicial DATE, 
                 data_final DATE,
                 processo_concluido BOOLEAN,
                 processo_vencido BOOLEAN,
-                advogados TEXT,
                 cliente TEXT,
                 cpf_cliente VARCHAR(11),
                 descricao TEXT
@@ -32,9 +33,10 @@ def create_table_lawyers():
     with instance_cursor() as cursor:
         query= '''
             CREATE TABLE IF NOT EXISTS advogados (
-                advogado TEXT,
-                oab VARCHAR(20) PRIMARY KEY,
-                cpf_advogados VARCHAR(11) NOT NULL
+                id SERIAL PRIMARY KEY,
+                nome_advogado TEXT UNIQUE,
+                oab VARCHAR(20) NOT NULL UNIQUE,
+                cpf_advogados VARCHAR(11) NOT NULL UNIQUE
             )
         ''' 
         cursor.execute(query)
@@ -45,12 +47,13 @@ def create_table_process_lawyer():
 
     with instance_cursor() as cursor:
         query= '''
-            CREATE TABLE IF NOT EXISTS processo_advogado (
-                nr_processo VARCHAR(20),
-                oab VARCHAR(20),
-                PRIMARY KEY (nr_processo, oab),
-                FOREIGN KEY (nr_processo) REFERENCES processos(nr_processo),
-                FOREIGN KEY (oab) REFERENCES advogados(oab)
+            CREATE TABLE IF NOT EXISTS processos_advogados (
+                id SERIAL PRIMARY KEY,
+                id_processo INT NOT NULL,
+                id_advogado INT NOT NULL,
+                FOREIGN KEY (id_processo) REFERENCES processos(id),
+                FOREIGN KEY (id_advogado) REFERENCES advogados(id),
+                UNIQUE (id_processo, id_advogado)
             )
         ''' 
         cursor.execute(query)
