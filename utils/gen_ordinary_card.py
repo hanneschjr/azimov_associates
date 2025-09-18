@@ -1,7 +1,9 @@
 from dash import html
 import dash_bootstrap_components as dbc
+from utils.icons_gen import gerar_icone
 
 def gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text):
+    card_style = {'height': '100%', 'margin-bottom': '12px'}
     card_processo = dbc.Card([
         dbc.CardBody([
             dbc.Row([
@@ -34,13 +36,47 @@ def gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_
                             html.Ul([
                                 html.Li([html.B("CLIENTE: ", style={'font-weight': 'bold'}), f"{df_aux['Cliente']}"]),
                                 html.Li([html.B("EMPRESA: ", style={'font-weight': 'bold'}), f"{df_aux['Empresa']}"]),
-                                html.Li([html.B("ADVOGADO: ", style={'font-weight': 'bold'}), f"{df_aux['Empresa']}"]),
+                                html.Li([html.B("ADVOGADO: ", style={'font-weight': 'bold'}), f"{df_aux['Advogado']}"]),
                             ])
                         ])
-                    ])
-                    
+                    ], style={'margin-bottom': '32px'}),
+                    dbc.Row([
+                        dbc.Col([
+                            html.H5("STATUS", style={'margin-bottom':0}),
+                        ], sm=5, style={'text-align': 'right'}),
+                        dbc.Col([
+                            html.I(className=f'{concluido} fa-2x dbc', style={'color': f'{color_c}'}),
+                        ], sm=2),
+                        dbc.Col([
+                            html.H5(f"{concluido_text}", style={'margin-bottom': 0}),
+                        ], sm=5, style={'text-align': 'left'}),
+                    ], style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}),
+                    dbc.Row([
+                        dbc.Col([
+                            html.H5("RESULTADO", style={'margin-bottom':0}),
+                        ], sm=5, style={'text-align': 'right'}),
+                        dbc.Col([
+                            html.I(className=f'{vencido} fa-2x dbc', style={'color': f'{color_v}'}),
+                        ], sm=2),
+                        dbc.Col([
+                            html.H5(f"{vencido_text}", style={'margin-bottom': 0}),
+                        ], sm=5, style={'text-align': 'left'}),
+                    ], style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}),
+                    html.Br(),
+                    dbc.Row([
+                        dbc.Col([
+                            dbc.Button([html.I(className='fa fa-pencil fa-2x')], style={'color': 'black'}, size='sm', outline=True, 
+                                       id={'type': 'editar_processo', 'index': int(df_aux['Nr Processo'])}),
+                        ], sm=2),
+                        dbc.Col([
+                            dbc.Button([html.I(className='fa fa-trash fa-2x')], style={'color': 'black'}, size='sm', outline=True, 
+                                       id={'type': 'deletar_processo', 'index': int(df_aux['Nr Processo'])}),
+                        ], sm=2),
+                    ], style={'display': 'flex', 'justify-content': 'flex-end'}),                                  
                 ], sm=12, md=6, style={'height': '100%', 'margin-top': 'auto', 'margin-bottom': 'auto'})
-            ])
+            ], style={'margin-top': '12px'})
 
         ])
-    ])
+    ], style=card_style, className='card_padrao')
+
+    return card_processo

@@ -7,7 +7,7 @@ from db.queries import consulta_geral_advogados
 
 
 # ========== Styles =========== #
-card_style = {'height': '100%', 'margin-bottom': '12px'}
+
 
 
 # =========== Layout ========== #
