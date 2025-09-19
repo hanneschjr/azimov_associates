@@ -24,7 +24,7 @@ from app import *
     State('processos_filter', 'value'), # é o Input (também é um Output)
     State('input_cpf_pesquisa', 'value') # é o Input do CPF (também é um Output)
 )
-def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switches, checklist, proc_filter, cpf)
+def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switches, checklist, proc_filter, cpf):
     trigg_id = callback_context.triggered[0]['prop_id'].split('.')[0]
 
     # Iniciar os cards 
