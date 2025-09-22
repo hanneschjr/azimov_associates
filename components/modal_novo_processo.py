@@ -37,7 +37,7 @@ layout = dbc.Modal([
         html.Hr(style={"border": "1px solid black"}),
         dbc.Row([
             dbc.Col([
-                dbc.Label('Vara', html_for='vara'),
+                dbc.Label('Vara', html_for='vara_title'),
                 dbc.RadioItems(id='vara',
                 options=[{'label': 'Civil', 'Value': 'Civil'},
                 {'label': 'Conciliação e Julgamento', 'value': 'Conciliação e Julgamento'},
@@ -45,7 +45,7 @@ layout = dbc.Modal([
                 {'label': 'Vara de Família', 'value': 'Vara de Família'}])
             ]),
             dbc.Col([
-                dbc.Label('Fase', html_for='fase'),
+                dbc.Label('Fase', html_for='fase_title'),
                 dbc.RadioItems(id='fase', inline=True,
                 options=[{'label': 'Elaboração', 'Value': 'Elaboração'},
                 {'label': 'Execução', 'value': 'Execução'},
@@ -55,7 +55,7 @@ layout = dbc.Modal([
                 {'label': 'Suspenso', 'value': 'Suspenso'}])
             ]),
             dbc.Col([
-                dbc.Label('Instância', html_for='instancia'),
+                dbc.Label('Instância', html_for='instancia_title'),
                 dbc.RadioItems(id='instancia',
                 options=[{'label': '1ª Instância', 'Value': 1},
                 {'label': '2ª Instância', 'value': '2'},])
@@ -97,7 +97,7 @@ layout = dbc.Modal([
                         dbc.Col([
                             dbc.Label("Selecione o advogado responsável"),
                             dcc.Dropdown(
-                                id='advogados_envolvidos',
+                                id='advogado_envolvido',
                                 className='dbc'
                             )
                         ])
@@ -124,11 +124,12 @@ layout = dbc.Modal([
             ], sm=12, md=7, style={'padding': '15px'})
         ], style={'margin-top': '15px'}),
         html.H5(id='div_erro'),
+        dcc.Interval(id='temporizador2', interval=5*1000, n_intervals=0, disabled=True)
         # html.Hr(style={"border": "1px solid black"}),
     ]),
     
     dbc.ModalFooter([
             dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
-            dbc.Button("Salvar", "id_save_button_novo_processo", color="success"),
+            dbc.Button("Salvar", "save_button_novo_processo", color="success"),
     ]),
 ], id='modal_processo', size='lg')

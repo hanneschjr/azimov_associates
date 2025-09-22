@@ -2,41 +2,51 @@ import dash
 from dash import Input, Output, State, callback_context
 import pandas as pd
 from utils.inputs_validates import validar_cpf, validar_oab
-from db.queries import consulta_geral_advogados
+from db.queries import consulta_geral_processos
 
 from app import app
 @app.callback(
-    Output('store_adv', 'data'),
-    Output('div_erro2', 'children'),
-    Output('div_erro2', 'style'),
-    Output('adv_nome', 'value'),
-    Output('adv_oab', 'value'),
-    Output('adv_cpf', 'value'),
-    Output('modal_new_lawyer', 'is_open'),
-    Output('temporizador', 'disabled'),
-    Input('save_button_novo_advogado', 'n_clicks'),
-    Input('cancel_button_novo_advogado', 'n_clicks'),
-    Input('new_adv_button', 'n_clicks'),
-    Input('temporizador', 'n_intervals'),
-    State('store_adv', 'data'),
-    State('adv_nome', 'value'),
-    State('adv_oab', 'value'),
-    State('adv_cpf', 'value'),
-    State('modal_new_lawyer', 'is_open'),
+    Output('store_proc', 'data'),
+    Output('div_erro', 'children'),
+    Output('div_erro', 'style'),
+    Output('empresa_matriz', 'value'),
+    Output('tipo_processo', 'value'),
+    Output('acao', 'value'),
+    Output('input_desc', 'value'),
+    Output('vara', 'value'),
+    Output('fase', 'value'),
+    Output('instancia', 'value'),
+    Output('data_inicial', 'date'),
+    Output('data_final', 'date'),
+    Output('processo_concluido', 'value'),
+    Output('processo_vencido', 'value'),
+    Output('advogado_envolvido', 'value'),
+    Output('input_cliente', 'value'),
+    Output('input_cliente_cpf', 'value'),
+    Output('input_no_processo', 'value'),
+    Output('modal_processo', 'is_open'),
+    Input('save_button_novo_processo', 'n_clicks'),
+    Input('cancel_button_novo_processo', 'n_clicks'),
+    Input('temporizador2', 'n_intervals'),
+    State('store_proc', 'data'),
+    State('modal_processo', 'is_open'),
     prevent_initial_call=False
 )
-def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, is_open):
+def atualizar_store_proc_limpar_campos_formulario(n_save, n_cancel, n_intervals, dataset, is_open):
     ctx = callback_context
-
+    
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
     if not ctx.triggered:
-        print("Iniciando o store_adv ==========")
-        dados_adv = consulta_geral_advogados()
-        dataset = pd.DataFrame(dados_adv, columns=['id','Advogado', 'OAB', 'CPF'])
+        print("Iniciando o store_proc ==========")
+        dados_proc = consulta_geral_processos()
+        dataset = pd.DataFrame(dados_proc, columns=['id','Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
         dataset.drop("id", axis=1, inplace=True)
         dataset = dataset.to_dict('records').copy()
-
-        return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+        return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
     
     # Detecta qual botão foi clicado
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
@@ -89,7 +99,6 @@ def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_interva
         dataset = df_adv.to_dict('records')
         print("Callback Adicionar Advogado Acionado! =======")
         print(f'{dataset}')
-        
 
         return dataset, ['Cadastro realizado com sucesso!'], \
                {'margin-bottom': '15px', 'color': 'green'}, '', '', '', True, False
