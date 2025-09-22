@@ -29,9 +29,10 @@ from app import app
     Input('cancel_button_novo_processo', 'n_clicks'),
     Input('temporizador2', 'n_intervals'),
     State('store_proc', 'data'),
+    State('modal_processo', 'is_open'),
     prevent_initial_call=False
 )
-def atualizar_store_proc_limpar_campos_formulario(n_save, n_cancel, n_intervals, dataset):
+def atualizar_store_proc_limpar_campos_formulario(n_save, n_cancel, n_intervals, dataset, is_open):
     ctx = callback_context
     
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
