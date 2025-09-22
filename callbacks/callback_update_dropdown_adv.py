@@ -1,7 +1,6 @@
 
 from dash import Input, Output, State
 import pandas as pd
-from dash import callback_context
 
 from app import app
 
@@ -14,6 +13,9 @@ from app import app
 )
 def update_dropdown_adv(is_open, store_dict):
     print('Callback_update_dropdown_adv_iniciado ============')
-    df_adv = pd.DataFrame(store_dict) # converter para df facilita para criar a lista de advogados
+    if not store_dict:
+        df_adv = pd.DataFrame(store_dict, columns=['Advogado', 'OAB', 'CPF'])
+    else:
+        df_adv = pd.DataFrame(store_dict) # converter para df facilita para criar a lista de advogados
     return [{'label': i, 'value': i} for i in df_adv['Advogado']]
 

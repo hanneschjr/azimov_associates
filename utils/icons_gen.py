@@ -1,6 +1,6 @@
 import pandas as pd
 
-def gerar_icone(df_proc_aux, i):
+def gerar_icones(df_proc_aux, i):
     df_aux = df_proc_aux.iloc[i]
     if df_aux['Processo Concluído'] == 'Sim' and df_aux['Processo Vencido'] == 'Sim':
         concluido = vencido = 'fa fa-check'

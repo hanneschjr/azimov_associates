@@ -20,6 +20,7 @@ def create_table_processes():
                 data_final DATE,
                 processo_concluido BOOLEAN,
                 processo_vencido BOOLEAN,
+                advogado TEXT,
                 cliente TEXT,
                 cpf_cliente VARCHAR(11),
                 descricao TEXT
@@ -42,18 +43,18 @@ def create_table_lawyers():
         cursor.execute(query)
 
 
-def create_table_process_lawyer():
-    print(f"Conectando ao banco: {DATABASE}@{HOST}:{PORT} como {USER}")
+# def create_table_process_lawyer():
+#     print(f"Conectando ao banco: {DATABASE}@{HOST}:{PORT} como {USER}")
 
-    with instance_cursor() as cursor:
-        query= '''
-            CREATE TABLE IF NOT EXISTS processos_advogados (
-                id SERIAL PRIMARY KEY,
-                id_processo INT NOT NULL,
-                id_advogado INT NOT NULL,
-                FOREIGN KEY (id_processo) REFERENCES processos(id),
-                FOREIGN KEY (id_advogado) REFERENCES advogados(id),
-                UNIQUE (id_processo, id_advogado)
-            )
-        ''' 
-        cursor.execute(query)
+#     with instance_cursor() as cursor:
+#         query= '''
+#             CREATE TABLE IF NOT EXISTS processos_advogados (
+#                 id SERIAL PRIMARY KEY,
+#                 id_processo INT NOT NULL,
+#                 id_advogado INT NOT NULL,
+#                 FOREIGN KEY (id_processo) REFERENCES processos(id),
+#                 FOREIGN KEY (id_advogado) REFERENCES advogados(id),
+#                 UNIQUE (id_processo, id_advogado)
+#             )
+#         ''' 
+#         cursor.execute(query)
