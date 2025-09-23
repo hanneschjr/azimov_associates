@@ -89,7 +89,6 @@ def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_interva
         dataset = df_adv.to_dict('records')
         print("Callback Adicionar Advogado Acionado! =======")
         print(f'{dataset}')
-        
 
         return dataset, ['Cadastro realizado com sucesso!'], \
                {'margin-bottom': '15px', 'color': 'green'}, '', '', '', True, False
