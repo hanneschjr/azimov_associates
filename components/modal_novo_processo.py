@@ -39,7 +39,7 @@ layout = dbc.Modal([
             dbc.Col([
                 dbc.Label('Vara', html_for='vara_title'),
                 dbc.RadioItems(id='vara',
-                options=[{'label': 'Civil', 'Value': 'Civil'},
+                options=[{'label': 'Civil', 'value': 'Civil'},
                 {'label': 'Conciliação e Julgamento', 'value': 'Conciliação e Julgamento'},
                 {'label': 'Trabalhista', 'value': 'Trabalhista'},
                 {'label': 'Vara de Família', 'value': 'Vara de Família'}])
@@ -47,7 +47,7 @@ layout = dbc.Modal([
             dbc.Col([
                 dbc.Label('Fase', html_for='fase_title'),
                 dbc.RadioItems(id='fase', inline=True,
-                options=[{'label': 'Elaboração', 'Value': 'Elaboração'},
+                options=[{'label': 'Elaboração', 'value': 'Elaboração'},
                 {'label': 'Execução', 'value': 'Execução'},
                 {'label': 'Impugnação', 'value': 'Impugnação'},
                 {'label': 'Instrução', 'value': 'Instrução'},
@@ -57,7 +57,7 @@ layout = dbc.Modal([
             dbc.Col([
                 dbc.Label('Instância', html_for='instancia_title'),
                 dbc.RadioItems(id='instancia',
-                options=[{'label': '1ª Instância', 'Value': 1},
+                options=[{'label': '1ª Instância', 'value': 1},
                 {'label': '2ª Instância', 'value': '2'},])
             ]),
         ]),
@@ -132,4 +132,4 @@ layout = dbc.Modal([
             dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
             dbc.Button("Salvar", "save_button_novo_processo", color="success"),
     ]),
-], id='modal_processo', size='lg')
+], id='modal_processo', size='lg', is_open=True)
