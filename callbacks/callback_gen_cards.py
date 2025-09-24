@@ -33,9 +33,11 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
     # Iniciar possíveis dataframes
 
     df_adv_aux = pd.DataFrame(adv_data)
-    df_proc_aux = pd.DataFrame(proc_data)
+    df_proc_aux = pd.DataFrame(proc_data, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
 
-    if (trigg_id == '' or trigg_id == 'store_proc' or trigg_id == 'store_adv' or trigg_id == 'todos os processos' or trigg_id == 'checklist_input'):
+    if (trigg_id == '' or trigg_id == 'store_proc' or trigg_id == 'store_adv' or trigg_id == 'todos_processos' or trigg_id == 'checklist_input'):
         if trigg_id != 'todos_processos':
             # Filtros dos switches
             if (1 and 2) in switches:
@@ -68,3 +70,43 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             cards += card
 
         return cards, None, None, None
+    
+    # Pesquisa pelo Nr do Processo
+    elif trigg_id == 'pesquisar_num_proc':
+        # Dados
+        df_proc_aux = df_proc_aux.loc[df_proc_aux['Nr Processo'] == proc_filter].sort_values(by='Data Inicial', ascending=False)
+        if len(df_proc_aux) == 0:
+            cards += [gerar_card_padrao(len(df_proc_aux))]
+            return cards, None, proc_filter, None
+        
+        # Processos
+        df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
+
+        df_proc_aux = df_proc_aux.fillna('-')
+
+        # Inseridndo o card padrão com a quantidade de processos
+        qnt_proc = len(df_proc_aux)
+        cards += [gerar_card_padrao(qnt_proc)]
+
+        # Iterando sobre os processos possíveis
+        for i in range(qnt_proc):
+            df_aux, concluido, vencido, color_c, color_v, concluido_text, vencido_text = gerar_icones(df_proc_aux, i)
+            card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
+            cards += card
+        
+        return cards, None, proc_filter, None
+    
+    # Pesquisa de cliente por CPF
+    elif trigg_id == 'pesquisar_cpf':
+        if cpf in df_proc_aux['CPF Cliente'].values:
+            df_proc_aux = df_proc_aux.loc[df_adv_aux['CPF Cliente'] == cpf].sort_values(by='Data Inicial', ascending=False)
+            nome = df_adv_aux.iloc[0]['Cliente']
+
+            # Card do Cliente
+            card_cliente = dbc.Card([
+                dbc.
+            ])
