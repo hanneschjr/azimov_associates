@@ -21,7 +21,7 @@ from app import app
     Output('data_final', 'date'), #12
     Output('processo_concluido', 'value'), #13
     Output('processo_vencido', 'value'), #14
-    Output('advogado_envolvido', 'value'), #15
+    Output('advogados_envolvidos', 'value'), #15
     Output('input_cliente', 'value'), #16
     Output('input_cliente_cpf', 'value'), #17
     Output('input_no_processo', 'value'), #18
@@ -33,15 +33,25 @@ from app import app
     Input('temporizador2', 'n_intervals'), #4 
     State('store_proc', 'data'), #5
     State('empresa_matriz', 'value'), #6 controle do modal
-    State('tipo_processo', 'value'), #6 controle do modal
-    State('acao', 'value'), #6 controle do modal
-    State('advogado_envolvido', 'value'), #6 controle do modal
-    State('input_cliente', 'value'), #6 controle do modal
-    State('input_cliente_cpf', 'value'), #6 controle do modal
-    State('input_no_processo', 'value'), #6 controle do modal
+    State('tipo_processo', 'value'), #7 limpeza e valor nulo
+    State('acao', 'value'), #8 limpeza e valor nulo
+    State('vara', 'value'), #9 limpeza e valor nulo
+    State('fase', 'value'), #10 limpeza e valor nulo
+    State('instancia', 'value'), #11 limpeza e valor nulo
+    State('data_inicial', 'date'), #12 limpeza e valor nulo
+    State('data_final', 'date'), #13 limpeza e valor nulo
+    State('processo_concluido', 'value'), #14 limpeza e valor nulo
+    State('processo_vencido', 'value'), #15 limpeza e valor nulo
+    State('advogados_envolvidos', 'value'), #16  limpeza e valor nulo
+    State('input_cliente', 'value'), #17 limpeza e valor nulo
+    State('input_cliente_cpf', 'value'), #18 limpeza e valor nulo
+    State('input_no_processo', 'value'), #19 limpeza, valor nulo, e conferência de duplicidade
+    State('input_desc', 'value'), #20 limpeza
     prevent_initial_call=False
 )
-def atualizar_store_limpar_campos_form_proc(n_save, n_cancel, n_processo, n_intervals, dataset, empresa, tipo, acao, adv, cliente, cliente_cpf, nr_processo):
+def atualizar_store_limpar_campos_form_proc(n_save, n_cancel, n_processo, n_intervals, dataset,
+                                            empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
+                                            concl, venc, adv, cliente, cliente_cpf, nr_processo, descricao):
     ctx = callback_context
     
     # protege de acionamentos inesperados na inicialização e do app e contra quebras
@@ -58,10 +68,6 @@ def atualizar_store_limpar_campos_form_proc(n_save, n_cancel, n_processo, n_inte
             dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
             dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
-        # return dash.no_update, [], {}, None, None, None, None, "Civil", \
-        #     'Elaboração', 1, date.today(), None, False, False, \
-        #     None, None, None, None, True
-
     # Detecta qual botão foi clicado
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
@@ -70,7 +76,6 @@ def atualizar_store_limpar_campos_form_proc(n_save, n_cancel, n_processo, n_inte
         return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
             dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
             dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
-
 
     # Se clicou em "Cancelar" -> fecha o modal e limpa todos os campos
     if trigger_id == 'cancel_button_novo_processo':
@@ -84,50 +89,43 @@ def atualizar_store_limpar_campos_form_proc(n_save, n_cancel, n_processo, n_inte
             None, None, date.today(), None, False, False, \
             None, None, None, None, True, dash.no_update
 
-
     # Se clicou em "Salvar" em "Adicionar Novo Processo"
     if trigger_id == 'save_button_novo_processo':
-        if None in [empresa, tipo, acao, adv, cliente, cliente_cpf, nr_processo]:
-            print(f'{empresa}, {tipo}, {acao}, {adv}, {cliente}, {cliente_cpf}, {nr_processo}')
+        if None in [empresa, tipo, acao, vara, fase, instancia, adv, cliente, cliente_cpf, nr_processo]:
+            # print(f'{empresa}, {tipo}, {acao}, {adv}, {cliente}, {cliente_cpf}, {nr_processo}')
             return dash.no_update, ['Por favor, preencha todos os campos obrigatórios para registro!'], \
                    {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}, \
                    dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
                    dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
                    dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, False
-  
-        # df_adv = pd.DataFrame(dataset)
-
-        # # Previne se o df estiver vazio e sem colunas
-        # if df_adv.empty or not all(col in df_adv.columns for col in ['Advogado', 'OAB', 'CPF']):
-        #     df_adv = pd.DataFrame(columns=['Advogado', 'OAB', 'CPF']) # cria um dataframe vazio com as colunas
-
-        # # print(df_adv)
-        # # print('xxxxxxxxxxxxxxxxxxxxxxxxxx')
-
-        # if str(oab) in df_adv['OAB'].values:
-        #     return dash.no_update, ['Número de OAB já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
         
-        # elif str(cpf) in df_adv['CPF'].values:
-        #     return dash.no_update, ['Número de CPF já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
+        df_proc = pd.DataFrame(dataset)
+        colunas_proc = ['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase', 'Instância', 'Data Inicial',
+                        'Data Final', 'Processo Concluído','Processo Vencido', 'Advogado', 'Cliente',
+                        'CPF Cliente', 'Descrição']
         
-        # elif not validar_cpf(cpf):
-        #     return dash.no_update, ['Número de CPF inválido!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
+        # Previne se o df estiver vazio e sem colunas
+        if df_proc.empty or not all(col in df_proc.columns for col in colunas_proc):
+            df_proc = pd.DataFrame(columns=colunas_proc) # cria um dataframe vazio com as colunas
 
-        # elif not validar_oab(oab):
-        #     return dash.no_update, ['Número OAB inválido!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
-        
-        # elif nome in df_adv['Advogado'].values:
-        #     return dash.no_update, [f'Nome {nome} já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
+        # testa se o nr do processo já está cadastrado
+        if str(nr_processo) in df_proc['Nr Processo'].values:
+            return dash.no_update, ['Número do processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, \
+                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, False
 
-        # df_adv.loc[df_adv.shape[0]] = [nome, oab, cpf]
-        # dataset = df_adv.to_dict('records')
-        # print("Callback Adicionar Advogado Acionado! =======")
-        # print(f'{dataset}')
-
-        # return dataset, ['Cadastro realizado com sucesso!'], \
-        #        {'margin-bottom': '15px', 'color': 'green'}, '', '', '', True, False
-
+        # feito todos os teste, insere o registro na última posição para ser gravado no store:
+        df_proc.loc[df_proc.shape[0]] = [nr_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
+                                            concl, venc, adv, cliente, cliente_cpf, descricao]
+        dataset = df_proc.to_dict('records')
+        print("Callback Atualizar Store Proc Acionado! =======")
+        return dataset, ['Cadastro realizado com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
+             None, None, None, None, None, None, None, date.today(), None, False, False, None, None, None, \
+             None, False, False
 
     # Fallback padrão
-    # return dash.no_update, [], {}, nome, oab, cpf, is_open, dash.no_update
+    return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 

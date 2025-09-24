@@ -19,13 +19,13 @@ layout = dbc.Modal([
         dbc.Row([
             dbc.Col([
                 # Empresa
-                dbc.Label('Empresa', html_for='empresa_matriz'),
+                dbc.Label('Empresa*', html_for='empresa_matriz'),
                 dcc.Dropdown(id='empresa_matriz', clearable=False, className='dbc', options=['Escritório Matriz', 'Filial Porto Alegre', 'Filial Curitiba', 'Filial Canoas']),
                 # Tipo de Processo
-                dbc.Label('Tipo de Processo', html_for='tipo_processo'),
+                dbc.Label('Tipo de Processo*', html_for='tipo_processo'),
                 dcc.Dropdown(id='tipo_processo', clearable=False, className='dbc', options=['Civil', 'Criminal', 'Previdenciário', 'Trabalhista', 'Vara de Família']),
                 # Ação
-                dbc.Label('Ação', html_for='acao'),
+                dbc.Label('Ação*', html_for='acao'),
                 dcc.Dropdown(id='acao', clearable=False, className='dbc', options=['Alimentos', 'Busca e Apreensão', 'Cautelar Inominada', 'Consignação', 'Habeas Corpus', 'Mandado de Segurança', 'Reclamação'])
             ], sm=12, md=4),
             dbc.Col([
@@ -37,7 +37,7 @@ layout = dbc.Modal([
         html.Hr(style={"border": "1px solid black"}),
         dbc.Row([
             dbc.Col([
-                dbc.Label('Vara', html_for='vara_title'),
+                dbc.Label('Vara*', html_for='vara_title'),
                 dbc.RadioItems(id='vara',
                 options=[{'label': 'Civil', 'value': 'Civil'},
                 {'label': 'Conciliação e Julgamento', 'value': 'Conciliação e Julgamento'},
@@ -45,7 +45,7 @@ layout = dbc.Modal([
                 {'label': 'Vara de Família', 'value': 'Vara de Família'}])
             ]),
             dbc.Col([
-                dbc.Label('Fase', html_for='fase_title'),
+                dbc.Label('Fase*', html_for='fase_title'),
                 dbc.RadioItems(id='fase', inline=True,
                 options=[{'label': 'Elaboração', 'value': 'Elaboração'},
                 {'label': 'Execução', 'value': 'Execução'},
@@ -55,7 +55,7 @@ layout = dbc.Modal([
                 {'label': 'Suspenso', 'value': 'Suspenso'}])
             ]),
             dbc.Col([
-                dbc.Label('Instância', html_for='instancia_title'),
+                dbc.Label('Instância*', html_for='instancia_title'),
                 dbc.RadioItems(id='instancia',
                 options=[{'label': '1ª Instância', 'value': 1},
                 {'label': '2ª Instância', 'value': '2'},])
@@ -95,21 +95,21 @@ layout = dbc.Modal([
                 dbc.Col([
                     dbc.Row([
                         dbc.Col([
-                            dbc.Label("Selecione o advogado responsável"),
+                            dbc.Label("Selecione o advogado responsável*"),
                             dcc.Dropdown(
-                                id='advogado_envolvido',
+                                id='advogados_envolvidos',
                                 className='dbc'
                             )
                         ])
                     ]),
                     dbc.Row([
                         dbc.Col([
-                            dbc.Input(id="input_cliente", placeholder="Nome completo do cliente...", type="text")
+                            dbc.Input(id="input_cliente", placeholder="Nome completo do cliente*...", type="text")
                         ])
                     ], style={'margin-top': '15px', 'padding': '15px'}),
                     dbc.Row([
                         dbc.Col([
-                        dbc.Input(id='input_cliente_cpf', placeholder='CPF do cliente (apenas números)...', type='number')
+                        dbc.Input(id='input_cliente_cpf', placeholder='CPF do cliente* (apenas números)...', type='number')
                         ])
                     ], style={'padding': '15px'}),
                 ], sm=12, md=7)
@@ -120,7 +120,7 @@ layout = dbc.Modal([
                 dcc.Dropdown(id='input_local_arquivo', clearable=False, className='dbc', placeholder='Local de Arquivo/Local')
             ], sm=12, md=5, style={'padding': '15px'}),
             dbc.Col([
-                dbc.Input(id='input_no_processo', placeholder='Insira o número do Processo', type='number', disabled=False)
+                dbc.Input(id='input_no_processo', placeholder='Insira o número do Processo*', type='number', disabled=False)
             ], sm=12, md=7, style={'padding': '15px'})
         ], style={'margin-top': '15px'}),
         html.H5(id='div_erro'),
@@ -132,4 +132,4 @@ layout = dbc.Modal([
             dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
             dbc.Button("Salvar", "save_button_novo_processo", color="success"),
     ]),
-], id='modal_processo', size='lg', is_open=True)
+], id='modal_processo', size='lg', is_open=False)

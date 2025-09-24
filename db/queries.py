@@ -45,3 +45,17 @@ def add_adv(nome, oab, cpf):
         cursor.execute(query, (nome, oab, cpf))
 
 
+def add_proc(nr_processo, empresa, tipo, acao, vara, fase,
+             instancia, data_ini, data_fin, concl, venc, 
+             adv, cliente, cliente_cpf, descricao):
+    with instance_cursor() as cursor:
+        query='''
+            INSERT INTO processos (nr_processo, empresa, tipo, acao,
+            vara, fase, instancia, data_inicial, data_final, processo_concluido,
+            processo_vencido, advogado, cliente, cpf_cliente, descricao)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (nr_processo) DO NOTHING
+            ''' 
+        cursor.execute(query, (nr_processo, empresa, tipo, acao, vara, fase,
+             instancia, data_ini, data_fin, concl, venc, 
+             adv, cliente, cliente_cpf, descricao))
