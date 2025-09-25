@@ -29,6 +29,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
 
     # Iniciar os cards 
     cards = []
+    card_style = {'height': '100%', 'margin-bottom': '12px'}
 
     # Iniciar possíveis dataframes
 
@@ -67,7 +68,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
         for i in range(qnt_proc):
             df_aux, concluido, vencido, color_c, color_v, concluido_text, vencido_text = gerar_icones(df_proc_aux, i)
             card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
-            cards += card
+            cards += [card]
 
         return cards, None, None, None
     
@@ -96,7 +97,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
         for i in range(qnt_proc):
             df_aux, concluido, vencido, color_c, color_v, concluido_text, vencido_text = gerar_icones(df_proc_aux, i)
             card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
-            cards += card
+            cards += [card]
         
         return cards, None, proc_filter, None
     
@@ -108,5 +109,93 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
 
             # Card do Cliente
             card_cliente = dbc.Card([
-                dbc.
+                dbc.CardBody([
+                    dbc.Row([
+                        dbc.Col([
+                            html.H4(f'Cliente: {nome}'),
+                            html.Hr(),
+                            html.H4(f'CPF: {cpf}')
+                        ])
+                    ])
+                ])
+            ], style=card_style)
+            cards += [card_cliente]
+
+            # Processos
+            df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
+            df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
+            df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
+            df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
+            df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
+        
+            df_proc_aux = df_proc_aux.fillna('-')
+
+            # Inseridndo o card padrão com a quantidade de processos
+            qnt_proc = len(df_proc_aux)
+            cards += [gerar_card_padrao(qnt_proc)]
+
+            for i in range(qnt_proc):
+                df_aux, concluido, vencido, color_c, color_v, concluido_text, vencido_text = gerar_icones(df_proc_aux, i)
+                card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
+                cards += [card]
+            
+            return cards, None, None, cpf
+        else:
+            # Card erro
+            card = dbc.Card([
+                dbc.CardBody([
+                    dbc.Row([
+                        dbc.Col([
+                            html.I(className='fa fa-exclamation dbc', style={'font-size': '4em'}),
+                        ], sm=3, className='text-center'),
+                        dbc.Col([
+                            html.H1('Nenhum CPF correspondente no banco de dados.')
+                        ], sm=9)
+                    ])
+                ])
+            ], style=card_style)
+            cards += [card]
+
+            return cards, None, None, cpf
+        
+    # Filtro dropdown dos advogados
+    elif trigg_id == 'advogados_filter':
+        df_aux = df_adv_aux.loc[df_adv_aux['Advogado'] == adv_filter]
+        nome = adv_filter
+        oab = df_aux.iloc[0]['OAB']
+        cpf = df_aux.iloc[0]['CPF']
+
+        # Card do advogado
+        card_adv = dbc.Card([
+            dbc.Row([
+                dbc.Col([
+                    html.H4(f'Advogado: {nome}'),
+                    html.Hr(),
+                    html.H4(f'OAB: {oab}'),
+                    html.H4(f'CPF: {cpf}'),
+                ]),
             ])
+        ], style=card_style)
+
+        cards += [card_adv]
+
+        # Processos
+        df_proc_aux = df_proc_aux[df_proc_aux['Advogado'] == nome]
+        df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
+        
+        df_proc_aux = df_proc_aux.fillna('-')
+
+        # Inseridndo o card padrão com a quantidade de processos
+        qnt_proc = len(df_proc_aux)
+        cards += [gerar_card_padrao(qnt_proc)]
+
+        for i in range(qnt_proc):
+            df_aux, concluido, vencido, color_c, color_v, concluido_text, vencido_text = gerar_icones(df_proc_aux, i)
+            card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
+            cards += [card]
+        
+        return cards, adv_filter, None, None
