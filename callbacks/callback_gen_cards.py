@@ -104,8 +104,8 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
     # Pesquisa de cliente por CPF
     elif trigg_id == 'pesquisar_cpf':
         if cpf in df_proc_aux['CPF Cliente'].values:
-            df_proc_aux = df_proc_aux.loc[df_adv_aux['CPF Cliente'] == cpf].sort_values(by='Data Inicial', ascending=False)
-            nome = df_adv_aux.iloc[0]['Cliente']
+            df_proc_aux = df_proc_aux.loc[df_proc_aux['CPF Cliente'] == cpf].sort_values(by='Data Inicial', ascending=False)
+            nome = df_proc_aux.iloc[0]['Cliente']
 
             # Card do Cliente
             card_cliente = dbc.Card([
