@@ -25,7 +25,7 @@ from app import app
     State('modal_new_lawyer', 'is_open'),
     prevent_initial_call=False
 )
-def atualizar_store_limpar_campos_formulario(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, is_open):
+def atualizar_store_limpar_campos_form_adv(n_save, n_cancel, n_open, n_intervals, dataset, nome, oab, cpf, is_open):
     ctx = callback_context
 
     # protege de acionamentos inesperados na inicialização e do app e contra quebras

@@ -1,6 +1,6 @@
 from dash import html
 import dash_bootstrap_components as dbc
-from utils.icons_gen import gerar_icone
+# from utils.icons_gen import gerar_icone
 
 def gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text):
     card_style = {'height': '100%', 'margin-bottom': '12px'}
@@ -21,7 +21,7 @@ def gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_
                     dbc.Row([
                         dbc.Col([
                             html.Ul([
-                                html.Li([html.B("DATA: ", style={'font-weight': 'bold'}), f"{df_aux['Data inicial']} - {df_aux['Data final']}"]),
+                                html.Li([html.B("DATA: ", style={'font-weight': 'bold'}), f"{df_aux['Data Inicial']} - {df_aux['Data Final']}"]),
                                 html.Li([html.B("AÇÃO: ", style={'font-weight': 'bold'}), f"{df_aux['Ação']}"]),
                                 html.Li([html.B("INSTÂNCIA: ", style={'font-weight': 'bold'}), f"{df_aux['Instância']}"]),
                                 html.Li([html.B("FASE: ", style={'font-weight': 'bold'}), f"{df_aux['Fase']}"]),

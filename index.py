@@ -28,29 +28,6 @@ import callbacks.callback_update_dropdown_adv
 import callbacks.callback_update_dropdown_adv2
 import callbacks.callaback_update_store_proc
 
-# dados_adv = consulta_geral_advogados()
-# df_adv = pd.DataFrame(dados_adv, columns=['Advogado', 'OAB', 'CPF'])
-# print('Aqui é o entrypoint')
-# print('tabela advogados:')
-# print(df_adv)
-
-dados_proc = consulta_geral_processos()
-df_proc = pd.DataFrame(dados_proc, columns=['Nr Processo',
-                                            'Empresa',
-                                             'CPF',
-                                             'Tipo',
-                                             'Ação',
-                                             'Vara',
-                                             'Fase'
-                                             'Instância',
-                                             'Data inicial',
-                                             'Data final',
-                                             'Processo Concluído',
-                                             'Processo vencido',
-                                             'Advogados',
-                                             'Cliente',
-                                             'CPF cliente',
-                                             'Descrição'])
 
 # Criar estrutura para Store intermediária ===============
 
