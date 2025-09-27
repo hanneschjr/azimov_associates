@@ -46,7 +46,8 @@ layout = dbc.Container([
                             dbc.Row([
                                 dbc.Col([
                                     dbc.Checklist(
-                                        options=[{"label": "Concluídos", "value": 1}, {"label": "Vencidos", "value": 2}],
+                                        options=[{"label": "Concluídos", "value": 1},
+                                                 {"label": "Vencidos", "value": 2}],
                                         value=[],
                                         id="switches_input",
                                         switch=True,
