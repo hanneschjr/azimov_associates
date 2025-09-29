@@ -48,12 +48,12 @@ from app import app
     State('processo_concluido', 'value'), #17 
     State('processo_vencido', 'value'), #18 
     State('advogados_envolvidos', 'value'), #19  
-    State('input_cliente', 'value'), #120 
+    State('input_cliente', 'value'), #20 
     State('input_cliente_cpf', 'value'), #21 
     State('input_desc', 'value'), #22 
     prevent_initial_call=False
 )
-def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, store_proc, no_processo,
+def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open, store_proc, no_processo,
                                             empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
                                             concl, venc, adv, cliente, cliente_cpf,  descricao):
     ctx = callback_context
@@ -84,12 +84,12 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, store_pr
 
         if len(df_int.index) == 0:
             if None in [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, adv, cliente, cliente_cpf]:
-                return store_proc, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red'}, \ 
+                return store_proc, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red'}, \
             no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
 
             if (no_processo in df_proc['Nr Processo'].values):
-                return store_proc, ['Número de processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, \ 
-            no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+                return store_proc, ['Número de processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, no_processo,  \
+             empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
 
             data_ini = pd.to_datetime(data_ini).date()
             try:
@@ -99,7 +99,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, store_pr
 
             df_proc.reset_index(drop=True, inplace=True)
 
-            concl = 0 if concl == False: else 1
+            concl = 0 if concl == False else 1
             venc = 0 if venc == False else 1
 
             if concl ==0: data_fin = None

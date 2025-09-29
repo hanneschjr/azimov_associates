@@ -19,7 +19,7 @@ from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 # import callbacks
 import callbacks.callaback_update_store_adv
-# import callbacks.callaback_update_store_proc
+import callbacks.callaback_update_store_proc
 import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal

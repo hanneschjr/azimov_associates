@@ -180,12 +180,15 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
         cards += [card_adv]
 
         # Processos
+        # print(df_proc_aux['Processo Concluído'].dtype)
+        df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].astype(str)
+        df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].astype(str)
         df_proc_aux = df_proc_aux[df_proc_aux['Advogado'] == nome]
         df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
-        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
-        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
-        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
-        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 'False', 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 'True', 'Processo Concluído'] = 'Sim'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 'False', 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 'True', 'Processo Concluído'] = 'Sim'
         
         df_proc_aux = df_proc_aux.fillna('-')
 
