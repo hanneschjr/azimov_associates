@@ -19,26 +19,45 @@ from db.queries import consulta_geral_advogados, consulta_geral_processos
 
 # import callbacks
 import callbacks.callaback_update_store_adv
+# import callbacks.callaback_update_store_proc
 import callbacks.callback_render_page
 import callbacks.callback_render_table_adv
 import callbacks.callback_toggle_modal
 import callbacks.callback_update_db
 import callbacks.callback_update_dropdown_adv
-# import callbacks.callback_open_modal_processos
+import callbacks.callback_open_modal_processos
 import callbacks.callback_update_dropdown_adv2
-import callbacks.callaback_update_store_proc
+import callbacks.callback_gen_cards
+
 
 
 # Criar estrutura para Store intermediária ===============
+data_int = {
+    'Nr Processo':[],
+    'Empresa':[],
+    'Tipo':[], 
+    'Ação':[], 
+    'Vara':[], 
+    'Fase':[],
+    'Instância':[], 
+    'Data Inicial':[], 
+    'Data Final':[], 
+    'Processo Concluído':[],
+    'Processo Vencido':[], 
+    'Advogado':[], 
+    'Cliente':[], 
+    'CPF Cliente':[], 
+    'Descrição':[],
+    'disabled':[]
+}
 
-
-
+df_int = pd.DataFrame(data_int)
 
 # ====================== Layout =================== #
 app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
-    dcc.Store(id='store_intermedio'),
+    dcc.Store(id='store_intermedio', data=df_int.to_dict()),
     dcc.Store(id='store_adv'),
     dcc.Store(id='store_proc'),
     html.Div(id='div_fantasma'),
@@ -60,7 +79,7 @@ app.layout = dbc.Container([
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8050, host='0.0.0.0', use_reloader=True)
+    app.run(debug=False, port=8050, host='0.0.0.0', use_reloader=False)
     
 
 
