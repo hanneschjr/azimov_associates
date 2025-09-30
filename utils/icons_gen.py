@@ -3,13 +3,13 @@ import pandas as pd
 def gerar_icones(df_proc_aux, i):
     df_aux = df_proc_aux.iloc[i]
     if df_aux['Processo Concluído'] == 'Sim' and df_aux['Processo Vencido'] == 'Sim':
-        concluido = vencido = 'fa fa-check'
+        concluido = vencido = 'fa fa-check' # é v
         color_c = color_v = 'green'
         concluido_text = 'Concluído'
         vencido_text = 'Vencido'
     elif df_aux['Processo Concluído'] == 'Sim' and df_aux['Processo Vencido'] == 'Não':
-        concluido = 'fa fa-check'
-        vencido = 'fa fa-times'
+        concluido = 'fa fa-check' # é o v
+        vencido = 'fa fa-times' # é o x
         color_c = 'green'
         color_v = 'red'
         concluido_text = 'Concluído'

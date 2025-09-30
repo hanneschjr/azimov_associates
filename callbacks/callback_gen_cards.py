@@ -22,7 +22,8 @@ from app import *
     Input('switches_input', 'value'), # é o checklist switch de status do processo
     Input('checklist_input', 'value'), # é o checklist de instância
     State('processos_filter', 'value'), # é o Input (também é um Output)
-    State('input_cpf_pesquisa', 'value') # é o Input do CPF (também é um Output)
+    State('input_cpf_pesquisa', 'value'), # é o Input do CPF (também é um Output)
+    prevent_initial_call=True
 )
 def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switches, checklist, proc_filter, cpf):
     trigg_id = callback_context.triggered[0]['prop_id'].split('.')[0]

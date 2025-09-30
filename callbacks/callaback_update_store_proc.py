@@ -102,7 +102,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
             concl = 0 if concl == False else 1
             venc = 0 if venc == False else 1
 
-            if concl ==0: data_fin = None
+            if concl == 0: data_fin = None
 
             df_proc.loc[df_proc.shape[0]] = [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
                                              concl, venc, adv, cliente, cliente_cpf, descricao]
@@ -171,9 +171,11 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
     #     return dataset, ['Cadastro realizado com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
     #          None, None, None, None, None, None, None, date.today(), None, False, False, None, None, None, \
     #          None, False, False
-
-    # # Fallback padrão
-    # return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-    #         dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-    #         dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+        # return store_proc, [], {}, no_processo, empresa, tipo, acao, vara, fase, \
+        #     instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, \
+        #     descricao, False, True
+    # Fallback padrão
+    return dash.no_update, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 

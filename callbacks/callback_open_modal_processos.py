@@ -31,8 +31,8 @@ def open_modal_processo(n_editar,n_new, n_cancel, is_open, sotere_proc, store_in
         df_int = pd.DataFrame(store_intermedio)
         df_int = df_int[:-1]
         store_intermedio = df_int.to_dict()
-
-        return not is_open, store_intermedio
+        is_open = not is_open
+        return is_open, store_intermedio
     
     if n_editar:
         trigg_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0])
