@@ -33,12 +33,11 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
     card_style = {'height': '100%', 'margin-bottom': '12px'}
 
     # Iniciar possíveis dataframes
-
     df_adv_aux = pd.DataFrame(adv_data)
     df_proc_aux = pd.DataFrame(proc_data, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
                                                      'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                      'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
-
+    verific = df_adv_aux.to_dict()
     if (trigg_id == '' or trigg_id == 'store_proc' or trigg_id == 'store_adv' or trigg_id == 'todos_processos' or trigg_id == 'checklist_input'):
         if trigg_id != 'todos_processos':
             # Filtros dos switches
@@ -54,7 +53,6 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             elif checklist == [2]: df_proc_aux = df_proc_aux.loc[df_proc_aux['Instância'] == 2]
         
         df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
-
         df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
         df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
         df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
@@ -182,14 +180,14 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
 
         # Processos
         # print(df_proc_aux['Processo Concluído'].dtype)
-        df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].astype(str)
-        df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].astype(str)
+        # df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].astype(str)
+        # df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].astype(str)
         df_proc_aux = df_proc_aux[df_proc_aux['Advogado'] == nome]
         df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
-        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 'False', 'Processo Concluído'] = 'Não'
-        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 'True', 'Processo Concluído'] = 'Sim'
-        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 'False', 'Processo Concluído'] = 'Não'
-        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 'True', 'Processo Concluído'] = 'Sim'
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
+        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
         
         df_proc_aux = df_proc_aux.fillna('-')
 

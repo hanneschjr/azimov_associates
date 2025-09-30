@@ -64,7 +64,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
     # first_call = True if (ctx.triggered[0]['value'] == None or ctx.triggered[0]['value'] == False) else False
     trigg_id = ctx.triggered_id
 
-    if not trigg_id:
+    if not ctx.triggered:
         print("Iniciando o store_proc ==========")
         dados_proc = consulta_geral_processos()
         df_proc = pd.DataFrame(dados_proc, columns=['id','Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
@@ -74,22 +74,27 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
         store_proc = df_proc.to_dict('records').copy()
         no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = adv = cliente = cliente_cpf = descricao = None
         concl = venc = False
-        return store_proc, [], {}, no_processo, empresa, tipo, acao, vara, fase, \
-            instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, \
-            descricao, False, True
+        return store_proc, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, False, True
 
     if trigg_id == 'save_button_novo_processo':
-        df_proc = pd.DataFrame(store_proc)
-        df_int = pd.DataFrame(store_int)
+        df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
+    
+        df_int = pd.DataFrame(store_int, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição', 'disabled'])
 
         if len(df_int.index) == 0:
             if None in [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, adv, cliente, cliente_cpf]:
                 return store_proc, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red'}, \
-            no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
 
             if (no_processo in df_proc['Nr Processo'].values):
                 return store_proc, ['Número de processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, no_processo,  \
-             empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+                 empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
 
             data_ini = pd.to_datetime(data_ini).date()
             try:
@@ -107,7 +112,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
             df_proc.loc[df_proc.shape[0]] = [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
                                              concl, venc, adv, cliente, cliente_cpf, descricao]
 
-            store_proc = df_proc.to_dict()
+            store_proc = df_proc.to_dict('records')
             no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = adv = cliente = cliente_cpf = descricao = None
             concl = venc = False
 
