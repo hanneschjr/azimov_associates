@@ -119,6 +119,8 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
             return store_proc, ['Processo salvo com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
                 concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+        else:
+            pass
 
 
     # # Detecta qual botão foi clicado

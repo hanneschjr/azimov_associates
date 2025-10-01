@@ -53,12 +53,17 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             elif checklist == [2]: df_proc_aux = df_proc_aux.loc[df_proc_aux['Instância'] == 2]
         
         df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
+        df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].astype(object)
+        df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].astype(object)
         df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
         df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
         df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
         df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
 
-        df_proc_aux = df_proc_aux.fillna('-')
+        concluido_1 = df_proc_aux['Processo Concluído']
+
+        df_proc_aux = df_proc_aux.astype(object).fillna('-')
+        # df_proc_aux = df_proc_aux.fillna('-')
 
         # inserir o card padrão
         qnt_proc = len(df_proc_aux)
