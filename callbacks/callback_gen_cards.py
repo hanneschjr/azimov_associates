@@ -37,8 +37,8 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
     df_proc_aux = pd.DataFrame(proc_data, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
                                                      'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                      'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
-    verific = df_proc_aux.to_dict()
-    if (trigg_id == '' or trigg_id == 'store_proc' or trigg_id == 'store_adv' or trigg_id == 'todos_processos' or trigg_id == 'checklist_input'):
+
+    if (trigg_id == '') or (trigg_id == 'store_proc') or (trigg_id == 'store_adv') or (trigg_id == 'todos_processos') or (trigg_id == 'checklist_input'):
         if trigg_id != 'todos_processos':
             # Filtros dos switches
             if (1 and 2) in switches:
@@ -56,7 +56,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
         df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].replace({1:'Sim', 0: 'Não'})
         df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].replace({1:'Sim', 0: 'Não'})
 
-        df_proc_aux = df_proc_aux.astype(object).fillna('-')
+        df_proc_aux = df_proc_aux.fillna('-').infer_objects(copy=False)
         # df_proc_aux = df_proc_aux.fillna('-')
 
         # inserir o card padrão
