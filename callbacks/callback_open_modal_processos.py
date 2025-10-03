@@ -39,7 +39,7 @@ def open_modal_processo(n_editar,n_new, n_cancel, is_open, sotere_proc, store_in
         numero_processo = trigg_dict['index']
         df_int = pd.DataFrame(store_intermedio)
         df_proc = pd.DataFrame(sotere_proc)
-        valores = df_proc.loc[df_proc['Nr Processo'] == numero_processo].values.tolist()
+        valores = df_proc.loc[df_proc['Nr Processo'] == str(numero_processo)].values.tolist()
         valores = valores[0] + [True]
         df_int = df_int[:-1]
         df_int.loc[len(df_int)] = valores

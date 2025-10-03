@@ -87,7 +87,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
                                                      'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                      'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição', 'disabled'])
 
-        if len(df_int.index) == 0:
+        if len(df_int.index) == 0: # criar processo
             if None in [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, adv, cliente, cliente_cpf]:
                 return store_proc, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red'}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
@@ -119,10 +119,14 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
             return store_proc, ['Processo salvo com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
                 concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+        
+        # edição de processo
         else:
-            pass
+            concl = 0 if concl == False else 1
+            venc = 0 if venc == False else 1
+            if concl == 0: data_fin = None
 
-
+            index = df_proc.loc[df_proc['Nr Processo'] == no_processo]
     # # Detecta qual botão foi clicado
     # trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 

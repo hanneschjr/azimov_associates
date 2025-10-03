@@ -13,6 +13,7 @@ from app import *
     Output('advogados_filter', 'value'), # é o atributo value do dropdown filtro advogado (também é um Input)
     Output('processos_filter', 'value'), # se refere ao Input do nº do processo (também é um State)
     Output('input_cpf_pesquisa', 'value'), # se refere ao Input do CPF (também é um State)
+    Output('switches_input', 'value'), # se refere ao Input do CPF (também é um State)
     Input('pesquisar_cpf', 'n_clicks'), # se refere ao botão de busca
     Input('todos_processos', 'n_clicks'), # se refere ao botão Todos os Processo
     Input('advogados_filter', 'value'), # ao dropdown Advogado (também é um Output)
@@ -38,7 +39,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
                                                      'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                      'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
 
-    if (trigg_id == '') or (trigg_id == 'store_proc') or (trigg_id == 'store_adv') or (trigg_id == 'todos_processos') or (trigg_id == 'checklist_input'):
+    if (trigg_id == '') or (trigg_id == 'store_proc') or (trigg_id == 'store_adv') or (trigg_id == 'todos_processos') or (trigg_id == 'checklist_input') or (trigg_id == 'switches_input'):
         if trigg_id != 'todos_processos':
             # Filtros dos switches
             if (1 and 2) in switches:
@@ -68,25 +69,28 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
             cards += [card]
 
-        return cards, None, None, None
+        if trigg_id == 'todos_processos':
+            return cards, None, None, None, []
+
+        return cards, None, None, None, dash.no_update
     
     # Pesquisa pelo Nr do Processo
     elif trigg_id == 'pesquisar_num_proc':
         df_proc_aux['Nr Processo'] = df_proc_aux['Nr Processo'].astype(int)
-        print(df_proc_aux['Nr Processo'].dtype)
+
         # Dados
         df_proc_aux = df_proc_aux[df_proc_aux['Nr Processo'] == proc_filter].sort_values(by='Data Inicial', ascending=False)
-        print(df_proc_aux)
+        
         if len(df_proc_aux) == 0:
             cards += [gerar_card_padrao(len(df_proc_aux))]
-            return cards, None, proc_filter, None
+            return cards, None, proc_filter, None, dash.no_update
         
         # Processos
         df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
         df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].replace({1:'Sim', 0: 'Não'})
         df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].replace({1:'Sim', 0: 'Não'})
 
-        df_proc_aux = df_proc_aux.fillna('-')
+        df_proc_aux = df_proc_aux.fillna('-').infer_objects(copy=False)
 
         # Inseridndo o card padrão com a quantidade de processos
         qnt_proc = len(df_proc_aux)
@@ -98,12 +102,12 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
             cards += [card]
         
-        return cards, None, proc_filter, None
+        return cards, None, proc_filter, None, dash.no_update
     
     # Pesquisa de cliente por CPF
     elif trigg_id == 'pesquisar_cpf':
-        if cpf in df_proc_aux['CPF Cliente'].values:
-            df_proc_aux = df_proc_aux.loc[df_proc_aux['CPF Cliente'] == cpf].sort_values(by='Data Inicial', ascending=False)
+        if str(cpf) in df_proc_aux['CPF Cliente'].values:
+            df_proc_aux = df_proc_aux.loc[df_proc_aux['CPF Cliente'] == str(cpf)].sort_values(by='Data Inicial', ascending=False)
             nome = df_proc_aux.iloc[0]['Cliente']
 
             # Card do Cliente
@@ -125,7 +129,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].replace({1:'Sim', 0: 'Não'})
             df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].replace({1:'Sim', 0: 'Não'})
         
-            df_proc_aux = df_proc_aux.fillna('-')
+            df_proc_aux = df_proc_aux.fillna('-').infer_objects(copy=False)
 
             # Inseridndo o card padrão com a quantidade de processos
             qnt_proc = len(df_proc_aux)
@@ -136,7 +140,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
                 card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
                 cards += [card]
             
-            return cards, None, None, cpf
+            return cards, None, None, cpf, dash.no_update
         else:
             # Card erro
             card = dbc.Card([
@@ -153,7 +157,7 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             ], style=card_style)
             cards += [card]
 
-            return cards, None, None, cpf
+            return cards, None, None, cpf, dash.no_update
         
     # Filtro dropdown dos advogados
     elif trigg_id == 'advogados_filter':
@@ -177,17 +181,13 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
         cards += [card_adv]
 
         # Processos
-        # print(df_proc_aux['Processo Concluído'].dtype)
-        # df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].astype(str)
-        # df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].astype(str)
         df_proc_aux = df_proc_aux[df_proc_aux['Advogado'] == nome]
         df_proc_aux = df_proc_aux.sort_values(by='Data Inicial', ascending=False)
-        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 0, 'Processo Concluído'] = 'Não'
-        df_proc_aux.loc[df_proc_aux['Processo Concluído'] == 1, 'Processo Concluído'] = 'Sim'
-        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 0, 'Processo Concluído'] = 'Não'
-        df_proc_aux.loc[df_proc_aux['Processo Vencido'] == 1, 'Processo Concluído'] = 'Sim'
+        df_proc_aux['Processo Concluído'] = df_proc_aux['Processo Concluído'].replace({1:'Sim', 0: 'Não'})
+        df_proc_aux['Processo Vencido'] = df_proc_aux['Processo Vencido'].replace({1:'Sim', 0: 'Não'})
+
         
-        df_proc_aux = df_proc_aux.fillna('-')
+        df_proc_aux = df_proc_aux.fillna('-').infer_objects(copy=False)
 
         # Inseridndo o card padrão com a quantidade de processos
         qnt_proc = len(df_proc_aux)
@@ -198,4 +198,4 @@ def generate_cards(n, n_all, adv_filter, proc_button, proc_data, adv_data, switc
             card = gerar_card_processo(df_aux, color_c, color_v, concluido, vencido, concluido_text, vencido_text)
             cards += [card]
         
-        return cards, adv_filter, None, None
+        return cards, adv_filter, None, None, dash.no_update
