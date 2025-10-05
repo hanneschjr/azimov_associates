@@ -29,20 +29,24 @@ def open_modal_processo(n_editar,n_new, n_cancel, is_open, sotere_proc, store_in
     
     if (trigg_id =='processo_button') or (trigg_id == 'cancel_button_novo_processo'):
         df_int = pd.DataFrame(store_intermedio)
-        df_int = df_int[:-1]
+        df_int = df_int[-1:]
         store_intermedio = df_int.to_dict()
-        is_open = not is_open
-        return is_open, store_intermedio
+        return not is_open, store_intermedio
     
     if n_editar:
         trigg_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0])
         numero_processo = trigg_dict['index']
         df_int = pd.DataFrame(store_intermedio)
+        # print(f'dataframe int: {df_int}, colunas int: {df_int.columns}')
         df_proc = pd.DataFrame(sotere_proc)
+        # print(f'dataframe proc: {df_proc}, colunas: {df_proc.columns}')
         valores = df_proc.loc[df_proc['Nr Processo'] == str(numero_processo)].values.tolist()
-        valores = valores[0] + [True]
-        df_int = df_int[:-1]
+        valores = valores[0] + [True] # lista com o valor True no final
+        # print(f'valores: {valores}')
+        df_int = df_int[-1:]
+        # print(f'dataframe int antes: {df_int}')
         df_int.loc[len(df_int)] = valores
+        # print(f'dataframe int depois: {df_int}')
         store_intermedio = df_int.to_dict()
-
+        print(f'store_intermedio: {store_intermedio}')
         return not is_open, store_intermedio

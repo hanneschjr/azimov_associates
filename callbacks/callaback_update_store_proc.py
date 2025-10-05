@@ -25,7 +25,7 @@ from app import app
     Output('input_cliente', 'value'), #16
     Output('input_cliente_cpf', 'value'), #17
     Output('input_desc', 'value'), #18
-    Output('input_no_processo', 'disable'), #19
+    Output('input_no_processo', 'disabled'), #19
     Output('temporizador2', 'disabled'), #20 desabilita o temporizador
 
     Input('processo_button', 'n_clicks'),  #1
@@ -53,7 +53,7 @@ from app import app
     State('input_desc', 'value'), #22 
     prevent_initial_call=False
 )
-def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open, store_proc, no_processo,
+def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open, store_proc, no_processo,
                                             empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
                                             concl, venc, adv, cliente, cliente_cpf,  descricao):
     ctx = callback_context
@@ -126,7 +126,33 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_interval, is_open,
             venc = 0 if venc == False else 1
             if concl == 0: data_fin = None
 
-            index = df_proc.loc[df_proc['Nr Processo'] == no_processo]
+            index = df_proc.loc[df_proc['Nr Processo'] == str(no_processo)].index[0]
+            df_proc.loc[index, df_proc.columns] = ['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição', 'disabled']
+            
+
+    if (trigg_id == 'store_intermedio') and is_open:
+        try:
+            df_int = pd.DataFrame(callback_context.triggered[0]['value'])
+            df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
+            # df_proc.drop("id", axis=1, inplace=True)
+            valores = df_int.head(1).values.tolist()[0]
+            no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf,  descricao, disable = valores
+            concl = False if concl == 0 else True
+            venc = False if venc == 0 else True   
+            return store_proc, ['Modo de Edição: Número de processo não pode ser alterado!'], {'margin-bottom': '15px', 'color': 'green'}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                concl, venc, adv, cliente, cliente_cpf, descricao, disable, True
+        
+        except:
+            no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf =  descricao = None
+            concl = venc = False
+            return store_proc, [], {}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                concl, venc, adv, cliente, cliente_cpf, descricao, True, False
     # # Detecta qual botão foi clicado
     # trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 

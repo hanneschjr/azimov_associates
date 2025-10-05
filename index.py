@@ -33,22 +33,22 @@ import callbacks.callback_gen_cards
 
 # Criar estrutura para Store intermediária ===============
 data_int = {
-    'Nr Processo':[],
-    'Empresa':[],
-    'Tipo':[], 
-    'Ação':[], 
-    'Vara':[], 
-    'Fase':[],
-    'Instância':[], 
-    'Data Inicial':[], 
-    'Data Final':[], 
-    'Processo Concluído':[],
-    'Processo Vencido':[], 
-    'Advogado':[], 
-    'Cliente':[], 
-    'CPF Cliente':[], 
-    'Descrição':[],
-    'disabled':[]
+    'Nr Processo':{},
+    'Empresa':{},
+    'Tipo':{}, 
+    'Ação':{}, 
+    'Vara':{}, 
+    'Fase':{},
+    'Instância':{}, 
+    'Data Inicial':{}, 
+    'Data Final':{}, 
+    'Processo Concluído':{},
+    'Processo Vencido':{}, 
+    'Advogado':{}, 
+    'Cliente':{}, 
+    'CPF Cliente':{}, 
+    'Descrição':{},
+    'disabled':{}
 }
 
 df_int = pd.DataFrame(data_int)
@@ -57,7 +57,7 @@ df_int = pd.DataFrame(data_int)
 app.layout = dbc.Container([
     # Store e Location
     dcc.Location(id='url'),
-    dcc.Store(id='store_intermedio', data=df_int.to_dict()),
+    dcc.Store(id='store_intermedio', data=data_int),
     dcc.Store(id='store_adv'),
     dcc.Store(id='store_proc'),
     html.Div(id='div_fantasma'),
