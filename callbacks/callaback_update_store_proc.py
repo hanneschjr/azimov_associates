@@ -132,7 +132,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open
                                                      'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                      'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição', 'disabled']
             
-
+    # preencher os campos do formulário
     if (trigg_id == 'store_intermedio') and is_open:
         try:
             df_int = pd.DataFrame(callback_context.triggered[0]['value'])
@@ -144,7 +144,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open
             no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf,  descricao, disable = valores
             concl = False if concl == 0 else True
             venc = False if venc == 0 else True   
-            return store_proc, ['Modo de Edição: Número de processo não pode ser alterado!'], {'margin-bottom': '15px', 'color': 'green'}, \
+            return dash.no_update, ['Modo de Edição: Número de processo não pode ser alterado!'], {'margin-bottom': '15px', 'color': 'green'}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
                 concl, venc, adv, cliente, cliente_cpf, descricao, disable, True #, True
         
