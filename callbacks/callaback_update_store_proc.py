@@ -27,6 +27,7 @@ from app import app
     Output('input_desc', 'value'), #18
     Output('input_no_processo', 'disabled'), #19
     Output('temporizador2', 'disabled'), #20 desabilita o temporizador
+    # Output('store_save_proc_db', 'data'),
 
     Input('processo_button', 'n_clicks'),  #1
     Input('save_button_novo_processo', 'n_clicks'), #2
@@ -76,7 +77,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open
         concl = venc = False
         return store_proc, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
             dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-            dash.no_update, False, True
+            dash.no_update, False, True 
 
     if trigg_id == 'save_button_novo_processo':
         df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
@@ -90,11 +91,11 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open
         if len(df_int.index) == 0: # criar processo
             if None in [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, adv, cliente, cliente_cpf]:
                 return store_proc, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red'}, \
-                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False #, False
 
             if (no_processo in df_proc['Nr Processo'].values):
                 return store_proc, ['Número de processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, no_processo,  \
-                 empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+                 empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False #, False
 
             data_ini = pd.to_datetime(data_ini).date()
             try:
@@ -118,7 +119,7 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open
 
             return store_proc, ['Processo salvo com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
-                concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+                concl, venc, adv, cliente, cliente_cpf, descricao, False, False #, True
         
         # edição de processo
         else:
@@ -145,14 +146,14 @@ def crud_form_proc(n_new_proc, n_save, n_delete, store_int, n_intervals, is_open
             venc = False if venc == 0 else True   
             return store_proc, ['Modo de Edição: Número de processo não pode ser alterado!'], {'margin-bottom': '15px', 'color': 'green'}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
-                concl, venc, adv, cliente, cliente_cpf, descricao, disable, True
+                concl, venc, adv, cliente, cliente_cpf, descricao, disable, True #, True
         
         except:
             no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf =  descricao = None
             concl = venc = False
             return store_proc, [], {}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
-                concl, venc, adv, cliente, cliente_cpf, descricao, True, False
+                concl, venc, adv, cliente, cliente_cpf, descricao, True, False #, False
     # # Detecta qual botão foi clicado
     # trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 

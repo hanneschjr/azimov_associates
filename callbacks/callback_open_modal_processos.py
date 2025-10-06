@@ -44,7 +44,6 @@ def open_modal_processo(n_editar,n_new, n_cancel, is_open, sotere_proc, store_in
         valores = valores[0] + [True] # lista com o valor True no final
         # print(f'valores: {valores}')
         df_int = df_int[-1:]
-        # print(f'dataframe int antes: {df_int}')
         df_int.loc[len(df_int)] = valores
         # print(f'dataframe int depois: {df_int}')
         store_intermedio = df_int.to_dict()
