@@ -59,3 +59,40 @@ def add_proc(nr_processo, empresa, tipo, acao, vara, fase,
         cursor.execute(query, (nr_processo, empresa, tipo, acao, vara, fase,
              instancia, data_ini, data_fin, concl, venc, 
              adv, cliente, cliente_cpf, descricao))
+        
+def update_proc(nr_processo, empresa, tipo, acao, vara, fase,
+             instancia, data_ini, data_fin, concl, venc, 
+             adv, cliente, cliente_cpf, descricao):
+    with instance_cursor() as cursor:
+        query='''
+            UPDATE processos 
+            SET empresa = %s,
+            tipo = %s,
+            acao = %s,
+            vara = %s, 
+            fase = %s, 
+            instancia = %s, 
+            data_inicial = %s, 
+            data_final = %s, 
+            processo_concluido = %s,
+            processo_vencido = %s, 
+            advogado = %s, 
+            cliente = %s, 
+            cpf_cliente = %s, 
+            descricao = %s
+            WHERE nr_processo = %s
+            ''' 
+        cursor.execute(query, (empresa, tipo, acao, vara, fase,
+             instancia, data_ini, data_fin, concl, venc, 
+             adv, cliente, cliente_cpf, descricao, nr_processo))
+        
+def delete_proc(nr_processo):
+    with instance_cursor() as cursor:
+        query = '''
+            DELETE FROM processos
+            WHERE nr_processo = %s
+            RETURNING *
+        '''
+        cursor.execute(query, (nr_processo,))
+        deleted_record = cursor.fetchone()
+    return deleted_record
