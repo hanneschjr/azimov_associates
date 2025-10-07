@@ -58,8 +58,6 @@ app.layout = dbc.Container([
     dcc.Store(id='store_intermedio', data=data_int),
     dcc.Store(id='store_adv'),
     dcc.Store(id='store_proc'),
-    dcc.Store(id='store_save_adv_db', data=False),
-    dcc.Store(id='store_save_proc_db', data=False),
     html.Div(id='div_fantasma'),
 
     # Layout

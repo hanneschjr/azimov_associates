@@ -35,7 +35,7 @@ def atualizar_store_limpar_campos_form_adv(n_save, n_cancel, n_open, n_intervals
         dados_adv = consulta_geral_advogados()
         dataset = pd.DataFrame(dados_adv, columns=['id','Advogado', 'OAB', 'CPF'])
         dataset.drop("id", axis=1, inplace=True)
-        dataset = dataset.to_dict('records').copy()
+        dataset = dataset.to_dict('records')
 
         return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
     
