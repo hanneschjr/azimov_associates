@@ -38,7 +38,7 @@ def open_modal_processo(n_editar,n_new, n_cancel, is_open, sotere_proc, store_in
         trigg_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0]) # pega o trigger do processo específico
         numero_processo = trigg_dict['index'] # pega o número do processo {'index': 1, 'type': 'editar_processo'}
         df_int = pd.DataFrame(store_intermedio)
-        print(f'dataframe int: {df_int}, colunas int: {df_int.columns}')
+        # print(f'dataframe int: {df_int}, colunas int: {df_int.columns}')
         df_proc = pd.DataFrame(sotere_proc)
         # print(f'dataframe proc: {df_proc}, colunas: {df_proc.columns}')
         valores = df_proc.loc[df_proc['Nr Processo'] == str(numero_processo)].values.tolist()
@@ -48,5 +48,5 @@ def open_modal_processo(n_editar,n_new, n_cancel, is_open, sotere_proc, store_in
         df_int.loc[len(df_int)] = valores
         # print(f'dataframe int depois: {df_int}')
         store_intermedio = df_int.to_dict()
-        print(f'store_intermedio: {store_intermedio}')
+        # print(f'store_intermedio: {store_intermedio}')
         return not is_open, store_intermedio
