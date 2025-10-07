@@ -1,6 +1,5 @@
 import dash
-from dash import callback_context
-from dash.dependencies import Input, Output, State, ALL
+from dash import callback_context, Input, Output, State, ALL
 import pandas as pd
 from datetime import date
 from utils.inputs_validates import validar_cpf, validar_oab
@@ -180,103 +179,45 @@ def crud_form_proc(n_save, n_delete, store_int, n_intervals, is_open, store_proc
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
                 concl, venc, adv, cliente, cliente_cpf, descricao, False, True
         
-    # # deletar processo
-    # # if str(no_processo) in n_delete:
-    # if triggered:
-    #     raw_id = triggered[0]['prop_id'].split('.')[0]
-    #     try:
-    #         trigg_id_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0])
-    #         trigg_type = trigg_id_dict.get('type', None)
-    #     except:
-    #         trigg_type = raw_id
-    #     if trigg_type:   
-    #         df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
-    #                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
-    #                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
-    #         # trigg_id_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0])
-    #         numero_processo = trigg_id_dict['index']
-
-    #         # apaga da base de dados o registro
-    #         registro_deletado = delete_proc(str(numero_processo))
-    #         if registro_deletado:
-    #             print(f'O Processo Nr {registro_deletado[1]} foi apagado com sucesso! ================')
-    #         else:
-    #             print('Nenhum registro foi encontrado para apagar. ==============')
-
-    #         # apaga o registro do dataframe
-    #         index_processo = df_proc.loc[df_proc['Nr Processo'] == str(numero_processo)].index[0]
-    #         df_proc.drop(index_processo, inplace=True)
-    #         df_proc.reset_index(drop=True, inplace=True)
-    #         # retorna o dataframe em dict
-    #         store_proc = df_proc.to_dict()
-    #         no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf =  descricao = None
-    #         concl = venc = False
-
-    #         return store_proc, [], {}, \
-    #                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
-    #                 concl, venc, adv, cliente, cliente_cpf, descricao, True, True
-
-
-    # # Fallback padrão
-    # return dash.no_update, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-    #         dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-    #         dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
-
-    triggered = callback_context.triggered
-
+    # deletar processo
+    # if str(no_processo) in n_delete:
     if triggered:
         raw_id = triggered[0]['prop_id'].split('.')[0]
         try:
-            # tenta interpretar como Pattern-Matching
-            trigg_id_dict = json.loads(raw_id.replace("'", '"'))
+            trigg_id_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0])
             trigg_type = trigg_id_dict.get('type', None)
-            trigg_index = trigg_id_dict.get('index', None)  # pega o index, se existir
         except:
-            # trigger simples (não Pattern-Matching)
             trigg_type = raw_id
-            trigg_index = None
-
-        # Se o trigger é o botão de deletar processo
-        if trigg_type == 'deletar_processo':
-            # Verifica se temos index
-            if trigg_index is None:
-                print("Erro: não foi possível determinar o index do processo para deletar")
-                return dash.no_update, [], {}, dash.no_update, dash.no_update, dash.no_update, \
-                    dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                    dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                    dash.no_update, dash.no_update, dash.no_update, True
-
-            numero_processo = trigg_index
-
-            # Constrói DataFrame
+        if trigg_type:   
             df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
                                                         'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                         'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
+            # trigg_id_dict = json.loads(callback_context.triggered[0]['prop_id'].split('.')[0])
+            numero_processo = trigg_id_dict['index']
 
-            # Deleta da base de dados
+            # apaga da base de dados o registro
             registro_deletado = delete_proc(str(numero_processo))
             if registro_deletado:
-                print(f"O Processo Nr {registro_deletado[1]} foi apagado com sucesso! ================")
+                print(f'O Processo Nr {registro_deletado[1]} foi apagado com sucesso! ================')
             else:
                 print('Nenhum registro foi encontrado para apagar. ==============')
 
-            # Deleta do DataFrame
+            # apaga o registro do dataframe
             index_processo = df_proc.loc[df_proc['Nr Processo'] == str(numero_processo)].index[0]
             df_proc.drop(index_processo, inplace=True)
             df_proc.reset_index(drop=True, inplace=True)
-
-            # Retorna DataFrame atualizado em dict
+            # retorna o dataframe em dict
             store_proc = df_proc.to_dict()
-
-            # Zera variáveis
-            no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf = descricao = None
+            no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf =  descricao = None
             concl = venc = False
 
             return store_proc, [], {}, \
-                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
-                concl, venc, adv, cliente, cliente_cpf, descricao, True, True
+                    no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                    concl, venc, adv, cliente, cliente_cpf, descricao, True, True
+
 
     # Fallback padrão
     return dash.no_update, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-        dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-        dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
+
