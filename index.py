@@ -26,7 +26,7 @@ import callbacks.callback_toggle_modal
 # import callbacks.callback_update_db
 import callbacks.callback_update_dropdown_adv
 import callbacks.callback_open_modal_processos
-import callbacks.callback_update_dropdown_adv2
+# import callbacks.callback_update_dropdown_adv2
 import callbacks.callback_gen_cards
 
 
