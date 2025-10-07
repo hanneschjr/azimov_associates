@@ -27,4 +27,6 @@ COPY --from=build /usr/local/bin /usr/local/bin
 # copia toda a pasta do projeto para dentro da imagem runtime
 COPY --from=build /app /app
 
-ENTRYPOINT [ "python", "index.py" ]
+EXPOSE 8050
+
+ENTRYPOINT ["gunicorn", "-w", "4", "-b", "0.0.0.0:8050", "app:server"]
