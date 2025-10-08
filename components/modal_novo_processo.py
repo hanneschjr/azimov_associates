@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from app import app
 from datetime import date
-from db.queries import consulta_geral_advogados
+
 
 
 # dados_adv = consulta_geral_advogados()

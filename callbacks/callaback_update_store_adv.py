@@ -2,7 +2,7 @@ import dash
 from dash import Input, Output, State, callback_context
 import pandas as pd
 from utils.inputs_validates import validar_cpf, validar_oab
-from db.queries import consulta_geral_advogados
+from db.queries import consulta_geral_advogados, add_adv
 
 from app import app
 @app.callback(
@@ -14,6 +14,7 @@ from app import app
     Output('adv_cpf', 'value'),
     Output('modal_new_lawyer', 'is_open'),
     Output('temporizador', 'disabled'),
+
     Input('save_button_novo_advogado', 'n_clicks'),
     Input('cancel_button_novo_advogado', 'n_clicks'),
     Input('new_adv_button', 'n_clicks'),
@@ -34,7 +35,7 @@ def atualizar_store_limpar_campos_form_adv(n_save, n_cancel, n_open, n_intervals
         dados_adv = consulta_geral_advogados()
         dataset = pd.DataFrame(dados_adv, columns=['id','Advogado', 'OAB', 'CPF'])
         dataset.drop("id", axis=1, inplace=True)
-        dataset = dataset.to_dict('records').copy()
+        dataset = dataset.to_dict('records')
 
         return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
     
@@ -56,7 +57,7 @@ def atualizar_store_limpar_campos_form_adv(n_save, n_cancel, n_open, n_intervals
     # Se clicou em "Salvar" em "Adicionar Novo Advogado"
     if trigger_id == 'save_button_novo_advogado':
         if None in [nome, oab, cpf]:
-            print(f'{nome}, {oab}, {cpf}')
+            # print(f'{nome}, {oab}, {cpf}')
             return dash.no_update, ['Todos os dados são obrigatórios para registro!'], \
                    {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}, \
                    nome, oab, cpf, True, dash.no_update
@@ -67,8 +68,6 @@ def atualizar_store_limpar_campos_form_adv(n_save, n_cancel, n_open, n_intervals
         if df_adv.empty or not all(col in df_adv.columns for col in ['Advogado', 'OAB', 'CPF']):
             df_adv = pd.DataFrame(columns=['Advogado', 'OAB', 'CPF']) # cria um dataframe vazio com as colunas
 
-        # print(df_adv)
-        # print('xxxxxxxxxxxxxxxxxxxxxxxxxx')
 
         if str(oab) in df_adv['OAB'].values:
             return dash.no_update, ['Número de OAB já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
@@ -85,11 +84,15 @@ def atualizar_store_limpar_campos_form_adv(n_save, n_cancel, n_open, n_intervals
         elif nome in df_adv['Advogado'].values:
             return dash.no_update, [f'Nome {nome} já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, nome, oab, cpf, True, False
 
+        # inserir novo advogado no banco
+        add_adv(nome, oab, cpf)
+        print(f'Advogado {nome} inserido no banco de dados!')
+
+        # inserir novo advogado no store_adv
         df_adv.loc[df_adv.shape[0]] = [nome, oab, cpf]
         dataset = df_adv.to_dict('records')
-        print("Callback Adicionar Advogado Acionado! =======")
-        print(f'{dataset}')
-
+        print(f"Advogado {nome} acionado no store_adv! =======")
+  
         return dataset, ['Cadastro realizado com sucesso!'], \
                {'margin-bottom': '15px', 'color': 'green'}, '', '', '', True, False
 
