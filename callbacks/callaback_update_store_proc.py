@@ -1,19 +1,20 @@
 import dash
-from dash import Input, Output, State, callback_context
+from dash import callback_context, Input, Output, State, ALL
 import pandas as pd
 from datetime import date
 from utils.inputs_validates import validar_cpf, validar_oab
-from db.queries import consulta_geral_processos
+from db.queries import consulta_geral_processos, add_proc, update_proc, delete_proc
+import json
 
 from app import app
 @app.callback(
     Output('store_proc', 'data'), #1
     Output('div_erro', 'children'), #2
     Output('div_erro', 'style'), #3
-    Output('empresa_matriz', 'value'), #4
-    Output('tipo_processo', 'value'),#5
-    Output('acao', 'value'), #6
-    Output('input_desc', 'value'), #7
+    Output('input_no_processo', 'value'), #4
+    Output('empresa_matriz', 'value'), #5
+    Output('tipo_processo', 'value'),#6
+    Output('acao', 'value'), #7
     Output('vara', 'value'), #8
     Output('fase', 'value'), #9
     Output('instancia', 'value'), #10
@@ -24,108 +25,192 @@ from app import app
     Output('advogados_envolvidos', 'value'), #15
     Output('input_cliente', 'value'), #16
     Output('input_cliente_cpf', 'value'), #17
-    Output('input_no_processo', 'value'), #18
-    Output('modal_processo', 'is_open'), #19 controle do modal
+    Output('input_desc', 'value'), #18
+    Output('input_no_processo', 'disabled'), #19
     Output('temporizador2', 'disabled'), #20 desabilita o temporizador
-    Input('save_button_novo_processo', 'n_clicks'), #1
-    Input('cancel_button_novo_processo', 'n_clicks'), #2 limpeza e controle do modal
-    Input('processo_button', 'n_clicks'),  #3 controle do modal
-    Input('temporizador2', 'n_intervals'), #4 
-    State('store_proc', 'data'), #5
-    State('empresa_matriz', 'value'), #6 controle do modal
-    State('tipo_processo', 'value'), #7 limpeza e valor nulo
-    State('acao', 'value'), #8 limpeza e valor nulo
-    State('vara', 'value'), #9 limpeza e valor nulo
-    State('fase', 'value'), #10 limpeza e valor nulo
-    State('instancia', 'value'), #11 limpeza e valor nulo
-    State('data_inicial', 'date'), #12 limpeza e valor nulo
-    State('data_final', 'date'), #13 limpeza e valor nulo
-    State('processo_concluido', 'value'), #14 limpeza e valor nulo
-    State('processo_vencido', 'value'), #15 limpeza e valor nulo
-    State('advogados_envolvidos', 'value'), #16  limpeza e valor nulo
-    State('input_cliente', 'value'), #17 limpeza e valor nulo
-    State('input_cliente_cpf', 'value'), #18 limpeza e valor nulo
-    State('input_no_processo', 'value'), #19 limpeza, valor nulo, e conferência de duplicidade
-    State('input_desc', 'value'), #20 limpeza
+
+    # Input('processo_button', 'n_clicks'),  #1
+    Input('save_button_novo_processo', 'n_clicks'), #2
+    Input({'type': 'deletar_processo', 'index': ALL}, 'n_clicks'), #3
+    Input('store_intermedio', 'data'), #4
+    Input('temporizador2', 'n_intervals'), #5
+
+    State('modal_processo', 'is_open'), #6
+    State('store_proc', 'data'), #7
+    State('input_no_processo', 'value'), #8 
+    State('empresa_matriz', 'value'), #9 
+    State('tipo_processo', 'value'), #10 
+    State('acao', 'value'), #11 
+    State('vara', 'value'), #12 
+    State('fase', 'value'), #13 
+    State('instancia', 'value'), #14 
+    State('data_inicial', 'date'), #15 
+    State('data_final', 'date'), #16 
+    State('processo_concluido', 'value'), #17 
+    State('processo_vencido', 'value'), #18 
+    State('advogados_envolvidos', 'value'), #19  
+    State('input_cliente', 'value'), #20 
+    State('input_cliente_cpf', 'value'), #21 
+    State('input_desc', 'value'), #22 
     prevent_initial_call=False
 )
-def atualizar_store_limpar_campos_form_proc(n_save, n_cancel, n_processo, n_intervals, dataset,
+def crud_form_proc(n_save, n_delete, store_int, n_intervals, is_open, store_proc, no_processo,
                                             empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
-                                            concl, venc, adv, cliente, cliente_cpf, nr_processo, descricao):
-    ctx = callback_context
+                                            concl, venc, adv, cliente, cliente_cpf,  descricao):
     
-    # protege de acionamentos inesperados na inicialização e do app e contra quebras
-    if not ctx.triggered:
+    # -------------------------------
+    # Identificação do trigger e first call
+    # ------------------------------- 
+    first_call = True if (callback_context.triggered[0]['value'] == None or callback_context.triggered[0]['value'] == False) else False
+    trigg_id = callback_context.triggered[0]['prop_id'].split('.')[0]
+
+    # -------------------------------
+    # Primeira chamada - retorno padrão
+    # ------------------------------- 
+    if first_call:
         print("Iniciando o store_proc ==========")
-        print(f'{empresa}, {tipo}, {acao}, {adv}, {cliente}, {cliente_cpf}, {nr_processo}')
         dados_proc = consulta_geral_processos()
-        dataset = pd.DataFrame(dados_proc, columns=['id','Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+        df_proc = pd.DataFrame(dados_proc, columns=['id','Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
                                                      'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
                                                      'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
-        dataset.drop("id", axis=1, inplace=True)
-        dataset = dataset.to_dict('records').copy()
-        return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+        df_proc.drop("id", axis=1, inplace=True)
+        store_proc = df_proc.to_dict('records')
+        no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = adv = cliente = cliente_cpf = descricao = None
+        concl = venc = False       
+        return store_proc, [], {}, no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, True
 
-    # Detecta qual botão foi clicado
-    trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    # -------------------------------
+    # Trigger = 'temporizador' - apagar a Div erro
+    # ------------------------------- 
+    if trigg_id == 'temporizador2':
+        return store_proc, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+                dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+                dash.no_update, False, True
 
-    # Se o temporizador for acionando -> apaga a Div e desabilita o próprio temporizador
-    if trigger_id == 'temporizador2':
-        return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
 
-    # Se clicou em "Cancelar" -> fecha o modal e limpa todos os campos
-    if trigger_id == 'cancel_button_novo_processo':
-        return dash.no_update, [], {}, None, None, None, None, None, \
-            None, None, date.today(), None, False, False, \
-            None, None, None, None, False, dash.no_update
+    if trigg_id == 'save_button_novo_processo':
+        df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
     
-    # Se clicou no botão "Processos" na Sidebar:
-    if trigger_id == 'processo_button':
-                return dash.no_update, [], {}, None, None, None, None, None, \
-            None, None, date.today(), None, False, False, \
-            None, None, None, None, True, dash.no_update
+        df_int = pd.DataFrame(store_int, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição', 'disabled'])
 
-    # Se clicou em "Salvar" em "Adicionar Novo Processo"
-    if trigger_id == 'save_button_novo_processo':
-        if None in [empresa, tipo, acao, vara, fase, instancia, adv, cliente, cliente_cpf, nr_processo]:
-            # print(f'{empresa}, {tipo}, {acao}, {adv}, {cliente}, {cliente_cpf}, {nr_processo}')
-            return dash.no_update, ['Por favor, preencha todos os campos obrigatórios para registro!'], \
-                   {'margin-bottom': '15px', 'color': 'red', 'text-shadow': '2px 2px 8px #000000'}, \
-                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, False
+        # Criação processo
+        if len(df_int) == 0: 
+            if None in [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, adv, cliente, cliente_cpf]:
+                return store_proc, ['Todos dados são obrigatórios para registro!'], {'margin-bottom': '15px', 'color': 'red'}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+
+            if (str(no_processo) in df_proc['Nr Processo'].values):
+                return store_proc, ['Número de processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, no_processo,  \
+                 empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, False
+
+            data_ini = pd.to_datetime(data_ini).date()
+            try:
+                data_fin = pd.to_datetime(data_fin).date()
+            except:
+                pass
+
+            df_proc.reset_index(drop=True, inplace=True)
+
+            concl = 0 if concl == False else 1
+            venc = 0 if venc == False else 1
+
+            if concl == 0: data_fin = None
+
+            df_proc.loc[df_proc.shape[0]] = [no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
+                                             concl, venc, adv, cliente, cliente_cpf, descricao]
+            
+            
+            add_proc(no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao)
+            print(f'Processo nº {no_processo} inserido com sucesso! =========')
+
+            store_proc = df_proc.to_dict('records')
+            no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = adv = cliente = cliente_cpf = descricao = None
+            concl = venc = False
+            return store_proc, ['Processo salvo com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                concl, venc, adv, cliente, cliente_cpf, descricao, False, False 
         
-        df_proc = pd.DataFrame(dataset)
-        colunas_proc = ['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase', 'Instância', 'Data Inicial',
-                        'Data Final', 'Processo Concluído','Processo Vencido', 'Advogado', 'Cliente',
-                        'CPF Cliente', 'Descrição']
+        # Edição de processo
+        else:
+            concl = 0 if concl == False else 1
+            venc = 0 if venc == False else 1
+            if concl == 0: data_fin = None
+
+            # Editar processo na base de dados:
+            update_proc(no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao)
+            print(f'Processo nº {no_processo} atualizado com sucesso! =========')
+
+            # Edita processo no dicionário store_proc:
+            index = df_proc.loc[df_proc['Nr Processo'] == str(no_processo)].index[0]
+            df_proc.loc[index, df_proc.columns] = [no_processo, empresa, tipo, acao, vara, fase, instancia, 
+                                                   data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf,
+                                                   descricao]
+            store_proc = df_proc.to_dict('records')
+            no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = adv = cliente = cliente_cpf = descricao = None
+            concl = venc = False
+            
+            return store_proc, ['Processo salvo com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                concl, venc, adv, cliente, cliente_cpf, descricao, False, False 
         
-        # Previne se o df estiver vazio e sem colunas
-        if df_proc.empty or not all(col in df_proc.columns for col in colunas_proc):
-            df_proc = pd.DataFrame(columns=colunas_proc) # cria um dataframe vazio com as colunas
+    # preencher os campos do formulário
+    if (trigg_id == 'store_intermedio') and is_open:
+        try:
+            df_int = pd.DataFrame(callback_context.triggered[0]['value'])
+            df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
+            # df_proc.drop("id", axis=1, inplace=True)
+            valores = df_int.head(1).values.tolist()[0] 
+            no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf,  descricao, disable = valores
+            concl = False if concl == 0 else True
+            venc = False if venc == 0 else True   
+            return dash.no_update, ['Modo de Edição: Número de processo não pode ser alterado!'], {'margin-bottom': '15px', 'color': 'green'}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                concl, venc, adv, cliente, cliente_cpf, descricao, disable, False
+        
+        except:
+            no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf =  descricao = None
+            concl = venc = False
+            return store_proc, [], {}, \
+                no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
+                concl, venc, adv, cliente, cliente_cpf, descricao, False, True
+        
+    # -------------------------------
+    # 'deletar_processo' no trigg_id - deletar processos
+    # ------------------------------- 
+    if 'deletar_processo' in trigg_id:
+        df_proc = pd.DataFrame(store_proc, columns=['Nr Processo', 'Empresa', 'Tipo', 'Ação', 'Vara', 'Fase',
+                                                     'Instância', 'Data Inicial', 'Data Final', 'Processo Concluído',
+                                                     'Processo Vencido', 'Advogado', 'Cliente', 'CPF Cliente', 'Descrição'])
+        
 
-        # testa se o nr do processo já está cadastrado
-        if str(nr_processo) in df_proc['Nr Processo'].values:
-            return dash.no_update, ['Número do processo já existe no sistema!'], {'margin-bottom': '15px', 'color': 'red'}, \
-                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                   dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, False
+        
+        # Identificando o nº do processo e o índice do df_proc
+        trigg_id_dict = json.loads(trigg_id)
+        numero_processo = trigg_id_dict['index']
+        index_processo = df_proc.loc[df_proc['Nr Processo'] == str(numero_processo)].index[0]
 
-        # feito todos os teste, insere o registro na última posição para ser gravado no store:
-        df_proc.loc[df_proc.shape[0]] = [nr_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin,
-                                            concl, venc, adv, cliente, cliente_cpf, descricao]
-        dataset = df_proc.to_dict('records')
-        print("Callback Atualizar Store Proc Acionado! =======")
-        return dataset, ['Cadastro realizado com sucesso!'], {'margin-bottom': '15px', 'color': 'green'}, \
-             None, None, None, None, None, None, None, date.today(), None, False, False, None, None, None, \
-             None, False, False
+        # Excluindo o registro da base de dados
+        delete_proc(str(numero_processo))
+        print(f'Processo nº {numero_processo} excluído com sucesso! ===============')
+
+        # Excuíndo o registro do df_proc
+        df_proc = df_proc.drop(index_processo)
+        df_proc.reset_index(drop=True, inplace=True)
+
+        # Preparação para o retorno
+        store_proc = df_proc.to_dict('records')
+        no_processo = empresa = tipo = acao = vara = fase = instancia = data_ini = data_fin = concl = venc = adv = cliente = cliente_cpf =  descricao = None
+        concl = venc = False
+        return store_proc, [], {}, no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, concl, venc, adv, cliente, cliente_cpf, descricao, False, True
 
     # Fallback padrão
-    return dataset, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+    return dash.no_update, [], {}, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
             dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
 
