@@ -179,7 +179,8 @@ def crud_form_proc(n_save, n_delete, store_int, n_intervals, is_open, store_proc
             return store_proc, [], {}, \
                 no_processo, empresa, tipo, acao, vara, fase, instancia, data_ini, data_fin, \
                 concl, venc, adv, cliente, cliente_cpf, descricao, False, True
-        
+    
+
     # -------------------------------
     # 'deletar_processo' no trigg_id - deletar processos
     # ------------------------------- 

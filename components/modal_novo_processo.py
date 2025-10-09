@@ -132,4 +132,4 @@ layout = dbc.Modal([
             dbc.Button("Cancelar", id="cancel_button_novo_processo", color="danger"),
             dbc.Button("Salvar", "save_button_novo_processo", color="success"),
     ]),
-], id='modal_processo', size='lg', is_open=False)
+], id='modal_processo', size='lg', is_open=False, backdrop=False)
