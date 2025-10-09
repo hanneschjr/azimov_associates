@@ -17,7 +17,7 @@ def gerar_icones(df_proc_aux, i):
     elif df_aux['Processo Concluído'] == 'Não':
         concluido = vencido = 'fa fa-times'
         color_c = 'red'
-        color_v = 'gray'
+        color_v = 'grey'
         concluido_text = vencido_text = 'Em andamento'
 
     return df_aux, concluido, vencido, color_c, color_v, concluido_text, vencido_text
